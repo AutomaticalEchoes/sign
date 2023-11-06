@@ -10,7 +10,7 @@ _阅前提示：本人喜欢用<sub title="如果影响你观看就先给你道�
 ## 使用
 
 |行为|操作|
-|---|：---：|
+|---|:---:|
 |提交标记|<kbd>ctrl</kbd> + <kbd>v</kbd> <br> `/mark <blockpos> or <entity>`|
 |追踪标记|鼠标左键点击聊天栏中的标记信息，提供建议指令，执行启用追踪 <br> `/getmark <markInfoNbt>` <sub title="不建议手写，因为是NBT" >`注`</sub>|
 |追踪最新发布到聊天栏的标记|<kbd>ctrl</kbd> + <kbd>g</kbd>|
