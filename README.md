@@ -18,14 +18,17 @@ _阅前提示：本人喜欢用<span title="如果影响你观看就先给你道
    </tr>
    <tr height="18" style="height:13.50pt;">
     <td class="xl66" height="36" rowspan="2" style="height:27.00pt;border-right:none;border-bottom:none;" >提交标记</td>
-    <td class="xl67" >key</td>
+    <td class="xl67" ><kbd>ctrl</kbd> + <kbd>v</kbd></td>
    </tr>
    <tr height="18" style="height:13.50pt;">
-    <td class="xl67" >code</td>
+    <td class="xl67" >`/mark <blockpos> or <entity>`</td>
    </tr>
    <tr height="18" style="height:13.50pt;">
-    <td class="xl68" height="18" style="height:13.50pt;" >追踪标记</td>
-    <td class="xl67" >click</td>
+    <td class="xl68" height="18" rowspan="2" style="height:13.50pt;" >追踪标记</td>
+    <td class="xl67" >鼠标左键点击聊天栏中的标记信息，提供建议指令，回城执行启用追踪</td>
+   </tr>
+   <tr height="18" style="height:13.50pt;">
+    <td class="xl67" >`/getmark <markInfoNbt>` <span title="不建议手写，因为是NBT" >`注`</span></td>
    </tr>
    <tr height="18" style="height:13.50pt;">
     <td class="xl68" height="18" style="height:13.50pt;" >追踪最新发布到聊天栏的标记</td>
@@ -33,21 +36,16 @@ _阅前提示：本人喜欢用<span title="如果影响你观看就先给你道
    </tr>
    <tr height="18" style="height:13.50pt;">
     <td class="xl67" height="18" style="height:13.50pt;" >移除最近启用追踪的标记</td>
-    <td class="xl67" >key</td>
+    <td class="xl67" ><kbd>ctrl</kbd> + <kbd>r</kbd></td>
    </tr>
    <tr height="18" style="height:13.50pt;">
     <td class="xl67" height="18" style="height:13.50pt;" >移除所有正在追踪的标记</td>
-    <td class="xl67" >key</td>
+    <td class="xl67" ><kbd>ctrl</kbd> + <kbd>c</kbd></td>
    </tr>
-   <!--[if supportMisalignedColumns]-->
-    <tr width="0" style="display:none;">
-     <td width="239" style="width:179;"></td>
-    </tr>
-   <!--[endif]-->
   </tbody></table>
 
 ### 提交标记
- 快捷方式:<kbd>ctrl</kbd> + <kbd>v</kbd>  
+ 快捷方式:  
  指令:`/mark <blockpos> or <entity>`  
 
 ### 追踪标记
