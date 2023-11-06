@@ -9,21 +9,21 @@ _阅前提示：本人喜欢用<span title="如果影响你观看就先给你道
 
 ## 使用
 
-#### 提交标记
-**快捷方式:**<kbd>ctrl</kbd> + <kbd>v</kbd>  
-**指令:**`/mark <blockpos> or <entity>`  
+### 提交标记
+ 快捷方式:<kbd>ctrl</kbd> + <kbd>v</kbd>  
+ 指令:`/mark <blockpos> or <entity>`  
 
-#### 追踪标记
-**快捷方式:**  
+### 追踪标记
+ 快捷方式:  
  - <kbd>ctrl</kbd> + <kbd>g</kbd> 获取最近并追踪最新发布到聊天栏的标记  
  - 鼠标左键点击聊天栏中的标记信息，提供建议指令，回城执行启用追踪  
-**指令:**`/getmark <markInfoNbt>` <span title="不建议手写，因为是NBT" >**`注`**</span>  
+ 指令:`/getmark <markInfoNbt>` <span title="不建议手写，因为是NBT" >`注`</span>  
 
-#### 移除最近启用追踪的标记
-**快捷方式:**<kbd>ctrl</kbd> + <kbd>r</kbd>  
+### 移除最近启用追踪的标记
+ 快捷方式:<kbd>ctrl</kbd> + <kbd>r</kbd>  
 
-#### 移除所有正在追踪的标记
-**快捷方式:**<kbd>ctrl</kbd> + <kbd>c</kbd>  
+### 移除所有正在追踪的标记
+ 快捷方式:<kbd>ctrl</kbd> + <kbd>c</kbd>  
 ___
 **非专业moder,望大家多多海涵.  
 如果你发现了什么问题或者有什么建议,可以发邮件给我.~~回不回复随缘~~  
