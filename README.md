@@ -9,38 +9,21 @@ _阅前提示：本人喜欢用<span title="如果影响你观看就先给你道
 
 ## 使用
 
-<table width="500" border="0" style="width:500pt;border-collapse:collapse;table-layout:fixed;">
-   <tr>
-    <td>行为</td>
-    <td>快捷方式</td>
-   </tr>
-   <tr>
-    <td rowspan="2">提交标记</td>
-    <td><kbd>ctrl</kbd> + <kbd>v</kbd></td>
-   </tr>
-   <tr>
-    <td>`/mark <blockpos> or <entity>`</td>
-   </tr>
-   <tr>
-    <td rowspan="2">追踪标记</td>
-    <td>鼠标左键点击聊天栏中的标记信息，提供建议指令，回城执行启用追踪</td>
-   </tr>
-   <tr>
-    <td>`/getmark <markInfoNbt>` <span title="不建议手写，因为是NBT" >`注`</span></td>
-   </tr>
-   <tr>
-    <td>追踪最新发布到聊天栏的标记</td>
-    <td>key</td>
-   </tr>
-   <tr>
-    <td>移除最近启用追踪的标记</td>
-    <td><kbd>ctrl</kbd> + <kbd>r</kbd></td>
-   </tr>
-   <tr>
-    <td>移除所有正在追踪的标记</td>
-    <td><kbd>ctrl</kbd> + <kbd>c</kbd></td>
-   </tr>
-  </table>
+|行为|操作|
+|---|---|
+|提交标记|<kbd>ctrl</kbd> + <kbd>v</kbd>|
+|      |------------------------------|
+|      |`/mark <blockpos> or <entity>`|
+|------|------------------------------|
+|追踪标记|鼠标左键点击聊天栏中的标记信息，提供建议指令，执行启用追踪|
+|      |-----------------------------------------------|
+|      |`/getmark <markInfoNbt>` <span title="不建议手写，因为是NBT" >`注`</span>|
+|------|---------------------------------------------------------------------|
+|追踪最新发布到聊天栏的标记|<kbd>ctrl</kbd> + <kbd>g</kbd>|
+|-----------------------------------------------------|
+|移除最近启用追踪的标记|<kbd>ctrl</kbd> + <kbd>r</kbd>|
+|-------------------------------------------------|
+|移除所有正在追踪的标记|<kbd>ctrl</kbd> + <kbd>c</kbd>|
 
 ### 提交标记
  快捷方式:  
