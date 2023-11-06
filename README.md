@@ -9,7 +9,7 @@ _阅前提示：本人喜欢用<span title="如果影响你观看就先给你道
 
 ## 使用
 
-<table width="311" border="0" cellpadding="0" cellspacing="0" style="width:233.25pt;border-collapse:collapse;table-layout:fixed;">
+<table width="500" border="0" style="width:500pt;border-collapse:collapse;table-layout:fixed;">
    <colgroup><col width="239" style="mso-width-source:userset;mso-width-alt:7648;">
    <col width="72" style="width:54.00pt;">
    </colgroup><tbody><tr height="18" style="height:13.50pt;">
