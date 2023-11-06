@@ -52,7 +52,7 @@ public class SignalRender {
         double length = subtract.length();
         Vec3 pointPos = length > 2 ? subtract.normalize().multiply(2.0D,2.0D,2.0D) : subtract;
         MutableComponent distance = Component.literal(DECIMAL_FORMAT.format(length)).append(Component.translatable("B").withStyle(ChatFormatting.GOLD));
-        RenderPoint(pointPos, poseStack, camera, distance, mark.getColor(), 0.2F);
+        RenderPoint(pointPos, poseStack, camera, distance, mark.getColor(), minecraft.player.isScoping() ? minecraft.player.getFieldOfViewModifier() : 1.0F);
         if(length > 24) return;
         if(mark instanceof BlockSign blockMark){
             RenderBlock(blockMark.getBlockPos(),poseStack,camera);
@@ -78,7 +78,7 @@ public class SignalRender {
         int width = minecraft.font.width(distanceMessage);
         poseStack.pushPose();
         poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-        poseStack.scale(0.01F,0.01F,1);
+        poseStack.scale(scale * 0.01F,scale * 0.01F,1.0F);
         minecraft.font.drawInBatch(distanceMessage,- width / 2F ,10,-1,false,poseStack.last().pose(),bufferSource, Font.DisplayMode.SEE_THROUGH,0,15728880);
         poseStack.popPose();
 
@@ -87,8 +87,8 @@ public class SignalRender {
 
     public void RenderPointTexture(PoseStack p_114083_, MultiBufferSource p_114084_, int p_114085_, Color color, float scale) {
         p_114083_.pushPose();
-        p_114083_.scale(scale, scale,0.1F);
-        p_114083_.translate(3 * scale /4, -scale, 0);
+        p_114083_.scale(scale * 0.2F, scale * 0.2F,0.1F);
+        p_114083_.translate(scale * 0.15F , - scale * 0.2F, 0);
         p_114083_.mulPose(Axis.ZP.rotationDegrees(45.0F));
         PoseStack.Pose posestack$pose = p_114083_.last();
         Matrix4f matrix4f = posestack$pose.pose();
