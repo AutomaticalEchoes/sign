@@ -24,6 +24,7 @@ _阅前提示：本人喜欢用<sub title="如果影响你观看就先给你道�
 |<font color=#FF55FF>实体</font>|鼠标悬浮显示详情<sub title="Mojang加入了这个功能，但是现在的显示非常单调，而且有bug，功能启动也是只在配置文件中，很隐秘，期待后续" >`注`</sub>|
 |<font color=#5555FF>展示框 <br> 掉落物</font>|鼠标悬浮显示详情|
 |<font color=#55FFFF>坐标</font>|无|  
+|---------------------------------|
 <font color=#55FF55>方块</font>
 <font color=#FF55FF>实体</font>
 
