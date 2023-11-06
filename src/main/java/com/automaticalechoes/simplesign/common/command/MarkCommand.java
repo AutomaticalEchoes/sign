@@ -56,7 +56,7 @@ public class MarkCommand {
            ResourceLocation key = ForgeRegistries.BLOCKS.getKey(block);
            mark = new BlockSign(pos, key);
        }else if(entity != null){
-           if(entity instanceof ItemEntity || entity instanceof ItemFrame){
+           if(entity instanceof ItemEntity || (entity instanceof ItemFrame itemFrame && !itemFrame.getItem().isEmpty())){
                ItemStack itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
                markName.append(((MutableComponent)itemStack.getItem().getName(itemStack)).withStyle(ChatFormatting.BLUE));
                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(itemStack));

@@ -23,11 +23,11 @@ public class Utils {
             minecraft.crosshairPickEntity = null;
             boolean scoping = minecraft.player.isScoping();
             double d0 =  200.0F;
-            double entityReach = minecraft.player.getEntityReach(); // Note - MC-76493 - We must validate players cannot click-through objects.
-            HitResult hitResult = entity.pick(Math.max(d0, entityReach), p_109088_, false); // Run pick() with the max of the two, so we can prevent click-through.
+           // Note - MC-76493 - We must validate players cannot click-through objects.
+            HitResult hitResult = entity.pick(d0, p_109088_, false); // Run pick() with the max of the two, so we can prevent click-through.
             Vec3 vec3 = entity.getEyePosition(p_109088_);
             if(hitResult.getType() == HitResult.Type.BLOCK){
-                d0 = hitResult.distanceTo(entity);
+                d0 = hitResult.getLocation().distanceToSqr(vec3);
             }
             Vec3 vec31 = entity.getViewVector(1.0F);
             Vec3 vec32 = vec3.add(vec31.x * d0, vec31.y * d0, vec31.z * d0);
