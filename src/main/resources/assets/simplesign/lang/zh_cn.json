@@ -9,5 +9,13 @@
   "sign.unvalid_mark": "不合规的标记",
   "sign.source_discord": "目标已消失",
   "sign.exist": "目标追踪已启用",
-  "sign.self": "不能追踪自己"
+  "sign.self": "不能追踪自己",
+  "sign.none": "他什么都没穿",
+  "sign._s": "的",
+  "sign.mainhand": "主手",
+  "sign.offhand": "副手",
+  "sign.feet": "鞋子",
+  "sign.legs": "腿甲",
+  "sign.chest": "胸甲",
+  "sign.head": "头盔"
 }
