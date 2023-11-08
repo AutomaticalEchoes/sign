@@ -1,0 +1,13 @@
+{
+  "sign.post_sign": "Post mark",
+  "sign.get_sign": "Track the latest post mark",
+  "sign.remove_sign": "Removes the recently enabled tracking mark",
+  "sign.clear_sign": "Remove all tracking mark",
+  "sign.category": "Simple sign",
+  "sign.marked": "mark",
+  "sign.at": "at",
+  "sign.unvalid_mark": "unvalid mark",
+  "sign.source_discord": "target lost",
+  "sign.exist": "already tracking",
+  "sign.self": "can not track yourself"
+}
