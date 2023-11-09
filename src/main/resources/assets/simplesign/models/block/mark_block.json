@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"render_type": "translucent",
 	"textures": {
-		"0": "examplemod:block/mark_block"
+		"0": "simplesign:block/mark_block"
 	},
 	"elements": [
 		{

@@ -17,7 +17,6 @@ public class SimpleSign
     public static final String MODID = "simplesign";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
-    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
     public static ResourceLocation SIGN_CHAT = new ResourceLocation("sign");
 
     public SimpleSign()

@@ -17,10 +17,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterClientCommandsEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -34,11 +31,14 @@ public class ClientEvents {
     public static final Utils.LimitList<MutableComponent> CHATS = new Utils.LimitList<>(10);
     public static ChatType CHAT_TYPE = null;
 
-    public static SignalRender signalBlockRender;
-
     @SubscribeEvent
     public static void RenderTick(RenderLevelStageEvent event){
-        if(signalBlockRender == null) signalBlockRender = new SignalRender();
+        if(!SignalRender.isInitialize()) {
+            SignalRender.init();
+        }else if(!SignalRender.isReady()){
+            return;
+        }
+
         if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES){
             Iterator<Sign> iterator = SIGNS.iterator();
             while (iterator.hasNext()){
@@ -46,12 +46,18 @@ public class ClientEvents {
                 if(!mark.CanUse()) {
                     iterator.remove();
                 }else{
-                    signalBlockRender.RenderMark(mark, event.getPoseStack(), event.getCamera());
+                    SignalRender.RenderMark(mark, event.getPoseStack(), event.getCamera(), event.getProjectionMatrix());
                 }
-
             }
-
         }
+    }
+
+    @SubscribeEvent
+    public static void InitFOV(ViewportEvent.ComputeFov computeFov){
+        if(!SignalRender.isInitialize()) {
+            SignalRender.init();
+        }
+        SignalRender.initProjection(computeFov.getFOV(), computeFov.getPartialTick());
     }
 
     @SubscribeEvent

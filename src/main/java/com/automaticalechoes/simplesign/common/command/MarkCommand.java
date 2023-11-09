@@ -47,10 +47,10 @@ public class MarkCommand {
    public static final MutableComponent _S = Component.translatable("sign._s");
    public static final MutableComponent NONE = Component.translatable("sign.none");
 
-   public static final Style STYLE_ITEM = Style.EMPTY.applyFormats(ChatFormatting.BLUE,ChatFormatting.BOLD);
-   public static final Style STYLE_BLOCK = Style.EMPTY.applyFormats(ChatFormatting.GREEN,ChatFormatting.BOLD);
-   public static final Style STYLE_ENTITY = Style.EMPTY.applyFormats(ChatFormatting.LIGHT_PURPLE,ChatFormatting.BOLD);
-   public static final Style STYLE_BLOCK_POS = Style.EMPTY.applyFormats(ChatFormatting.AQUA,ChatFormatting.BOLD);
+   public static final Style STYLE_ITEM = Style.EMPTY.applyFormats(ChatFormatting.BLUE);
+   public static final Style STYLE_BLOCK = Style.EMPTY.applyFormats(ChatFormatting.GREEN);
+   public static final Style STYLE_ENTITY = Style.EMPTY.applyFormats(ChatFormatting.LIGHT_PURPLE);
+   public static final Style STYLE_BLOCK_POS = Style.EMPTY.applyFormats(ChatFormatting.AQUA);
 
    public static void register(CommandDispatcher<CommandSourceStack> p_249870_) {
        p_249870_.register(MARK
