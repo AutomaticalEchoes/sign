@@ -10,12 +10,20 @@
   "sign.source_discord": "目标已消失",
   "sign.exist": "目标追踪已启用",
   "sign.self": "不能追踪自己",
-  "sign.none": "他什么都没穿",
+
+  "sign.none": "，他什么都没穿",
   "sign._s": "的",
   "sign.mainhand": "主手",
   "sign.offhand": "副手",
   "sign.feet": "鞋子",
   "sign.legs": "腿甲",
   "sign.chest": "胸甲",
-  "sign.head": "头盔"
+  "sign.head": "头盔",
+
+  "sign.ping_mainhand": "标示主手物品",
+  "sign.ping_offhand": "标示副手物品",
+  "sign.ping_feet": "标示鞋子",
+  "sign.ping_legs": "标示腿甲",
+  "sign.ping_chest": "标示胸甲",
+  "sign.ping_head": "标示头盔"
 }

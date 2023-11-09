@@ -1,6 +1,7 @@
 package com.automaticalechoes.simplesign.client;
 
 import com.automaticalechoes.simplesign.SimpleSign;
+import com.automaticalechoes.simplesign.client.keys.Keymaps;
 import com.automaticalechoes.simplesign.client.render.SignalRender;
 import com.automaticalechoes.simplesign.client.command.ClientGetMarkCommand;
 import com.automaticalechoes.simplesign.common.sign.Sign;
@@ -71,44 +72,9 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void KeyPass(InputEvent.Key event){
-        if(ClientModEvents.POST_SIGN.isDown()){
-            PostSign();
-        }else if(ClientModEvents.GET_SIGN.isDown()){
-            GetSign();
-        }else if(ClientModEvents.REMOVE_SIGN.isDown() && SIGNS.size() > 0){
-            SIGNS.remove(SIGNS.size() - 1);
-        }else if(ClientModEvents.CLEAR_SIGN.isDown()){
-            SIGNS.clear();
-        }
+        Keymaps.Actions();
     }
 
-    public static void PostSign(){
-        HitResult hitResult = Utils.IPick(1.0F);
-        String message = "";
-        if(hitResult instanceof BlockHitResult blockHitResult && blockHitResult.getType() != HitResult.Type.MISS){
-            BlockPos blockPos = blockHitResult.getBlockPos();
-            message = blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ();
-        }else if(hitResult instanceof EntityHitResult entityHitResult){
-            message = entityHitResult.getEntity().getUUID().toString();
-        }
 
-        if(message.equals("")) return;
-
-        String s1 = SharedConstants.filterText("/mark " + message);
-        if (s1.startsWith("/")) {
-            if (!Minecraft.getInstance().player.connection.sendUnsignedCommand(s1.substring(1))) {
-                SimpleSign.LOGGER.error("Not allowed to run command with signed argument from click event: '{}'", (Object)s1);
-            }
-        } else {
-            SimpleSign.LOGGER.error("Failed to run command without '/' prefix from click event: '{}'", (Object)s1);
-        }
-    }
-
-    public static void GetSign(){
-        if(CHATS.isEmpty())return;
-        MutableComponent component = CHATS.getLast();
-        String value = component.getStyle().getClickEvent().getValue();
-        ClientCommandHandler.runCommand(value.substring(1));
-    }
 
 }

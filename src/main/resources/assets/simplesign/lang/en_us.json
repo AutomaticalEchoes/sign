@@ -9,5 +9,21 @@
   "sign.unvalid_mark": "unvalid mark",
   "sign.source_discord": "target lost",
   "sign.exist": "already tracking",
-  "sign.self": "can not track yourself"
+  "sign.self": "can not track yourself",
+
+  "sign.none": ",nothing on there",
+  "sign._s": "'s ",
+  "sign.mainhand": "main hand ",
+  "sign.offhand": "off hand ",
+  "sign.feet": "feet ",
+  "sign.legs": "legs ",
+  "sign.chest": "chest ",
+  "sign.head": "head ",
+
+  "sign.ping_mainhand": "ping main hand item",
+  "sign.ping_offhand": "ping off hand item",
+  "sign.ping_feet": "ping feet item",
+  "sign.ping_legs": "ping legs item",
+  "sign.ping_chest": "ping chest",
+  "sign.ping_head": "ping head"
 }

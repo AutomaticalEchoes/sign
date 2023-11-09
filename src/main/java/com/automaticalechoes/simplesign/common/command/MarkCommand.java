@@ -55,7 +55,7 @@ public class MarkCommand {
    public static void register(CommandDispatcher<CommandSourceStack> p_249870_) {
        p_249870_.register(MARK
                .then(ENTITY.executes(context -> Mark(context.getSource(),null ,EntityArgument.getEntity(context,"entity")))
-                       .then(SLOT.executes(context -> SignSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
+                       .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
                .then(BLOCKPOS.executes(context -> Mark(context.getSource(),BlockPosArgument.getBlockPos(context,"blockPos"),null))));
    }
 
@@ -114,7 +114,7 @@ public class MarkCommand {
        return 1;
    }
 
-   public static int SignSlot(CommandSourceStack sourceStack,Entity entity, Integer slotNum){
+   public static int PingSlot(CommandSourceStack sourceStack,Entity entity, Integer slotNum){
        SlotAccess slot = entity.getSlot(slotNum);
        EquipmentSlot equipmentSlot = getEquipmentSlot(slotNum);
        if(slot!= SlotAccess.NULL && equipmentSlot != null){
