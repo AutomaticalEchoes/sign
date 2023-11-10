@@ -2,6 +2,7 @@ package com.automaticalechoes.simplesign.client;
 
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.command.ClientGetMarkCommand;
+import com.automaticalechoes.simplesign.client.command.ClientSettingCommand;
 import com.automaticalechoes.simplesign.client.keys.Keymaps;
 import com.automaticalechoes.simplesign.client.render.SignalRender;
 import com.automaticalechoes.simplesign.common.sign.Sign;
@@ -66,6 +67,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void RegisterClientCommand(RegisterClientCommandsEvent event){
         ClientGetMarkCommand.register(event.getDispatcher());
+        ClientSettingCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
