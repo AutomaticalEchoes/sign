@@ -1,19 +1,14 @@
 package com.automaticalechoes.simplesign.client;
 
-import com.automaticalechoes.simplesign.SimpleSign;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -67,5 +62,9 @@ public class Utils {
             }
             return super.add(t);
         }
+    }
+
+    public static boolean ShouldRenderBorder(){
+        return ClientConfig.SHOULD_SHOW_BORDER.get();
     }
 }

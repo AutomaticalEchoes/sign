@@ -11,7 +11,10 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.NbtTagArgument;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ClientGetMarkCommand {
     public static final LiteralArgumentBuilder<CommandSourceStack> GETMARK =
             Commands.literal("getmark").requires(commandSourceStack -> commandSourceStack.hasPermission(0));

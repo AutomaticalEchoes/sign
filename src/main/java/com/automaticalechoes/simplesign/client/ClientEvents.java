@@ -1,22 +1,17 @@
 package com.automaticalechoes.simplesign.client;
 
 import com.automaticalechoes.simplesign.SimpleSign;
+import com.automaticalechoes.simplesign.client.command.ClientGetMarkCommand;
 import com.automaticalechoes.simplesign.client.keys.Keymaps;
 import com.automaticalechoes.simplesign.client.render.SignalRender;
-import com.automaticalechoes.simplesign.client.command.ClientGetMarkCommand;
 import com.automaticalechoes.simplesign.common.sign.Sign;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,10 +30,7 @@ public class ClientEvents {
     public static void RenderTick(RenderLevelStageEvent event){
         if(!SignalRender.isInitialize()) {
             SignalRender.init();
-        }else if(!SignalRender.isReady()){
-            return;
         }
-
         if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES){
             Iterator<Sign> iterator = SIGNS.iterator();
             while (iterator.hasNext()){
@@ -52,13 +44,13 @@ public class ClientEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void InitFOV(ViewportEvent.ComputeFov computeFov){
-        if(!SignalRender.isInitialize()) {
-            SignalRender.init();
-        }
-        SignalRender.initProjection(computeFov.getFOV(), computeFov.getPartialTick());
-    }
+//    @SubscribeEvent
+//    public static void InitFOV(ViewportEvent.ComputeFov computeFov){
+//        if(!SignalRender.isInitialize()) {
+//            SignalRender.init();
+//        }
+//        SignalRender.initProjection(computeFov.getFOV(), computeFov.getPartialTick());
+//    }
 
     @SubscribeEvent
     public static void ClientReceivedChat(ClientChatReceivedEvent.Player event){
@@ -80,7 +72,6 @@ public class ClientEvents {
     public static void KeyPass(InputEvent.Key event){
         Keymaps.Actions();
     }
-
 
 
 }

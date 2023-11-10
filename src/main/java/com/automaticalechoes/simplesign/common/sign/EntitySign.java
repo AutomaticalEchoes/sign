@@ -1,5 +1,6 @@
 package com.automaticalechoes.simplesign.common.sign;
 
+import com.automaticalechoes.simplesign.SimpleSign;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -56,6 +57,9 @@ public class EntitySign implements Sign {
 
     @Override
     public boolean equals(Object obj) {
+        if(this.entity != null && obj instanceof Entity entity){
+            return this.entity == entity;
+        }
         if(obj.getClass() != this.getClass()) return false;
         EntitySign obj1 = (EntitySign) obj;
         return obj1.pos.equals(this.pos) && obj1.uuid.equals(this.uuid);
@@ -63,7 +67,8 @@ public class EntitySign implements Sign {
 
     @Override
     public Boolean CanUse() {
-        if(Minecraft.getInstance().player.position().subtract(this.pos.getCenter()).length() < 32.0D && this.entity == null){
+        if(Minecraft.getInstance().player.position().subtract(this.pos.getCenter()).length() < 32.0D
+                &&( this.entity == null || (this.entity.isRemoved() && this.entity.getRemovalReason() == Entity.RemovalReason.DISCARDED))){
             for (Entity next : Minecraft.getInstance().level.entitiesForRendering()) {
                 if (next.getUUID().equals(this.uuid)) {
                     this.entity = next;
@@ -73,8 +78,15 @@ public class EntitySign implements Sign {
 
             return this.entity != null;
         }
-        return entity == null || !entity.isRemoved();
+        return entity == null || !entity.isRemoved() || entity.getRemovalReason() == Entity.RemovalReason.DISCARDED;
     }
+
+    @Nullable
+    public Entity getEntity() {
+        return entity;
+    }
+
+
 
     @OnlyIn(Dist.CLIENT)
     public boolean isLocalPlayer(){

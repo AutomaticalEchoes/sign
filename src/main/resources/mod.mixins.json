@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "com.automaticalechoes.simplesign.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "refmap": "mod.refmap.json",
+  "plugin": "com.automaticalechoes.simplesign.mixin.MixinPlugin",
+  "mixins": [
+    "LevelRenderMixin",
+    "MinecraftMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

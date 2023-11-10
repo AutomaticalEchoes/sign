@@ -2,7 +2,9 @@ package com.automaticalechoes.simplesign.client;
 
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.keys.Keymaps;
+import com.automaticalechoes.simplesign.client.render.Model.BlockModel;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,10 +25,10 @@ public class ClientModEvents {
         Keymaps.init(event);
     }
 
-
-
-
-
+    @SubscribeEvent
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(BlockModel.LAYER_LOCATION,BlockModel::createBodyLayer);
+    }
 
 
 }
