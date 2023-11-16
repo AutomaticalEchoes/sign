@@ -78,7 +78,7 @@ public class EntitySign implements Sign {
 
             return this.entity != null;
         }
-        return entity == null || !entity.isRemoved() || entity.getRemovalReason() == Entity.RemovalReason.DISCARDED;
+        return entity == null || entity.isAlive() || entity.getRemovalReason() == Entity.RemovalReason.DISCARDED;
     }
 
     @Nullable
