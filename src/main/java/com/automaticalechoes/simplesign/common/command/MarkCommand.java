@@ -65,6 +65,7 @@ public class MarkCommand {
        MutableComponent markName = Component.empty();
        MutableComponent posMessage = Component.empty().withStyle(STYLE_BLOCK_POS);
        Sign mark = null;
+       ItemStack itemStack = null;
        if(pos != null){
            Block block = sourceStack.getLevel().getBlockState(pos).getBlock();
            markName.append(block.getName()).withStyle(STYLE_BLOCK);
@@ -73,7 +74,7 @@ public class MarkCommand {
            mark = new BlockSign(pos, key);
        }else if(entity != null){
            if(entity instanceof ItemEntity || (entity instanceof ItemFrame itemFrame && !itemFrame.getItem().isEmpty())){
-               ItemStack itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
+               itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
                markName.append(itemStack.getItem().getName(itemStack)).withStyle(STYLE_ITEM);
                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(itemStack));
            }else {
@@ -82,7 +83,7 @@ public class MarkCommand {
                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ENTITY,new HoverEvent.EntityTooltipInfo(entity.getType(),entity.getUUID(),entity.getDisplayName()));
            }
            posMessage.append(Component.translatable(" [" + entity.blockPosition().toShortString() + "]"));
-           mark = new EntitySign(entity.getUUID(),entity.blockPosition());
+           mark = new EntitySign(entity.getUUID(),entity.blockPosition(),itemStack);
        }
 
        if(mark == null){

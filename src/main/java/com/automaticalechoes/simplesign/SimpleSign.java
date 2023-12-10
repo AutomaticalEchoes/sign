@@ -1,6 +1,7 @@
 package com.automaticalechoes.simplesign;
 
 import com.automaticalechoes.simplesign.client.ClientConfig;
+import com.automaticalechoes.simplesign.client.Utils;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;

@@ -1,19 +1,31 @@
 package com.automaticalechoes.simplesign.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OutlineBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 
+@OnlyIn(Dist.CLIENT)
 public class Utils {
+    public static final RandomSource RANDOM = RandomSource.create();
     @Nullable
     public static HitResult IPick(float p_109088_) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -64,7 +76,33 @@ public class Utils {
         }
     }
 
-    public static boolean ShouldRenderBorder(){
-        return ClientConfig.SHOULD_SHOW_BORDER.get();
+    public static boolean ShouldEntityGlow(){
+        return ClientConfig.SHOULD_ENTITY_GLOW.get();
     }
+    public static boolean ShouldShowDetail(){
+        return ClientConfig.SHOULD_SHOW_DETAIL.get();
+    }
+
+    @NotNull
+    public static RenderType getFallbackItemRenderType(ItemStack stack, BakedModel model, boolean cull) {
+        if (stack.getItem() instanceof BlockItem blockItem) {
+            var renderTypes = model.getRenderTypes(blockItem.getBlock().defaultBlockState(), RandomSource.create(42), ModelData.EMPTY);
+            if (renderTypes.contains(RenderType.translucent())){
+                return getEntityRenderType(RenderType.translucent(), cull);
+            }else {
+                return IRenderType.entityCutOut;
+            }
+        }else {
+            return cull ? IRenderType.translucentCullBlock : IRenderType.translucentItem;
+        }
+//
+    }
+
+    public static RenderType getEntityRenderType(RenderType chunkRenderType, boolean cull)
+    {
+        if (chunkRenderType != RenderType.translucent())
+            return IRenderType.entityCutOut;
+        return cull || !Minecraft.useShaderTransparency() ? IRenderType.translucentCullBlock : IRenderType.translucentItem;
+    }
+
 }

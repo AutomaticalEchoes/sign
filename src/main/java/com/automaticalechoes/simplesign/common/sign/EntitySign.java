@@ -1,13 +1,19 @@
 package com.automaticalechoes.simplesign.common.sign;
 
 import com.automaticalechoes.simplesign.SimpleSign;
+import com.mojang.serialization.DataResult;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -21,15 +27,18 @@ public class EntitySign implements Sign {
     protected Entity entity;
     protected final BlockPos pos;
     protected final UUID uuid;
+    protected final ItemStack itemStack;
 
-    public EntitySign(UUID uuid, BlockPos pos){
+    public EntitySign(UUID uuid, BlockPos pos, @Nullable ItemStack itemStack){
         this.uuid = uuid;
         this.pos = pos;
+        this.itemStack = itemStack;
     }
 
     public EntitySign(CompoundTag compoundTag){
         this.uuid = compoundTag.getUUID(UUID);
         this.pos = BlockPos.of(compoundTag.getLong(BLOCK_POS));
+        this.itemStack = compoundTag.contains(ITEM)? ItemStack.of(compoundTag.getCompound(ITEM)) : null;
     }
 
     @Override
@@ -52,6 +61,9 @@ public class EntitySign implements Sign {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putUUID(UUID,this.uuid);
         compoundTag.putLong(BLOCK_POS,this.pos.asLong());
+        if(itemStack !=null){
+            compoundTag.put(ITEM,itemStack.save(new CompoundTag()));
+        }
         return compoundTag;
     }
 
@@ -68,7 +80,8 @@ public class EntitySign implements Sign {
     @Override
     public Boolean CanUse() {
         if(Minecraft.getInstance().player.position().subtract(this.pos.getCenter()).length() < 32.0D
-                &&( this.entity == null || (this.entity.isRemoved() && this.entity.getRemovalReason() == Entity.RemovalReason.DISCARDED))){
+                &&( this.entity == null || (this.entity.isRemoved()))){
+            this.entity = null;
             for (Entity next : Minecraft.getInstance().level.entitiesForRendering()) {
                 if (next.getUUID().equals(this.uuid)) {
                     this.entity = next;
@@ -86,10 +99,15 @@ public class EntitySign implements Sign {
         return entity;
     }
 
-
-
     @OnlyIn(Dist.CLIENT)
     public boolean isLocalPlayer(){
         return this.uuid.equals(Minecraft.getInstance().player.getUUID());
+    }
+
+
+    @Override
+    @Nullable
+    public ItemStack getItemStack(){
+       return this.itemStack;
     }
 }

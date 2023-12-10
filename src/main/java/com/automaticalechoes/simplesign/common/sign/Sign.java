@@ -2,10 +2,12 @@ package com.automaticalechoes.simplesign.common.sign;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -15,6 +17,7 @@ public interface Sign {
      HashMap<String, Type> MARK_TYPES = new HashMap<>();
      Type BLOCK = Register("block", BlockSign::new);
      Type ENTITY = Register("entity", EntitySign::new);
+     String ITEM = "show_item";
 
      Type getMarkType();
      Vec3 getPointPos();
@@ -23,6 +26,8 @@ public interface Sign {
      Boolean CanUse();
      @OnlyIn(Dist.CLIENT)
      Color getColor();
+     @Nullable
+     ItemStack getItemStack();
 
 
      static Sign FromTag(Tag tag){
@@ -33,16 +38,12 @@ public interface Sign {
          return null;
      }
 
-
      static CompoundTag ToTag(Sign mark){
           CompoundTag compoundTag = mark.CreateTag();
           String name = mark.getMarkType().Name();
           compoundTag.putString(TYPE,name);
           return compoundTag;
      }
-
-
-
 
 
      static Type Register(String name, Function<CompoundTag, Sign> Builder){

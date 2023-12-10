@@ -4,14 +4,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 
 public class BlockSign implements Sign {
     public static final String BLOCK_POS = "block_pos";
     public static final String BLOCK_TYPE = "block_type";
+
     private final BlockPos blockPos;
     private final ResourceLocation blockType;
 
@@ -63,5 +67,12 @@ public class BlockSign implements Sign {
         if(obj.getClass() != this.getClass()) return false;
         BlockSign obj1 = (BlockSign) obj;
         return obj1.blockPos.equals(this.blockPos) && obj1.blockType.equals(this.blockType);
+    }
+
+    @Override
+    @Nullable
+    public ItemStack getItemStack(){
+        Block block = ForgeRegistries.BLOCKS.getValue(this.blockType);
+        return block != null ? block.asItem().getDefaultInstance() : null;
     }
 }
