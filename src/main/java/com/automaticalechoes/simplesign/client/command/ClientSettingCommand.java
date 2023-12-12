@@ -26,7 +26,7 @@ public class ClientSettingCommand {
         p_249870_.register(SSI_SETTING
                 .then(ENTITY_GLOW
                         .then(SHOULD_ENTITY_GLOW.executes(context -> {
-                            ClientConfig.SHOULD_ENTITY_GLOW.set(BoolArgumentType.getBool(context,"border"));
+                            ClientConfig.SHOULD_ENTITY_GLOW.set(BoolArgumentType.getBool(context,"entity_glow"));
                             return 1;
                         }))
                 )

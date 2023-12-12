@@ -16,7 +16,8 @@ _阅前提示：本人喜欢用<sub title="如果影响你观看就先给你道�
 |追踪最新发布到聊天栏的标记|<kbd>ctrl</kbd> + <kbd>g</kbd>|
 |移除最近启用追踪的标记|<kbd>ctrl</kbd> + <kbd>r</kbd>|
 |移除所有正在追踪的标记|<kbd>ctrl</kbd> + <kbd>c</kbd>|
-|启用/禁用目标边框高亮|`/ssi shouldBorder <bool>`  <sub title="默认为true" >`注`</sub>|
+|启用/禁用目标边框高亮|`/ssi shouldEntityGlow <bool>`  <sub title="默认为true" >`注`</sub>|
+|启用/禁用目标物品显示|`/ssi showDetail(Dev) <bool>`  <sub title="默认为true" >`注`</sub>|
 |**标示目标装备栏·Beta**|<kbd>ctrl</kbd> + <kbd>f</kbd> <br>（原版六个装备栏，六个键都是这个，请自行设置）|
 
 ### 标记信息

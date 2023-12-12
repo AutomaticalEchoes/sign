@@ -25,7 +25,6 @@ import java.util.Iterator;
 public class ClientEvents {
     public static final AbstractList<Sign> SIGNS = new ArrayList<>();
     public static final Utils.LimitList<MutableComponent> CHATS = new Utils.LimitList<>(10);
-    public static ChatType CHAT_TYPE = null;
 
     @SubscribeEvent
     public static void RenderTick(RenderLevelStageEvent event){
@@ -55,11 +54,9 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void ClientReceivedChat(ClientChatReceivedEvent.Player event){
-        if(CHAT_TYPE == null){
-            Registry<ChatType> registry = Minecraft.getInstance().level.registryAccess().registryOrThrow(Registries.CHAT_TYPE);
-            CHAT_TYPE = registry.get(SimpleSign.SIGN_CHAT);
-        }
-        if(event.getBoundChatType().chatType() == CHAT_TYPE && event.getPlayerChatMessage().unsignedContent() instanceof MutableComponent mutableComponent){
+        if( event.getPlayerChatMessage().unsignedContent() instanceof MutableComponent mutableComponent
+                && mutableComponent.getStyle().getClickEvent() != null
+                && mutableComponent.getStyle().getClickEvent().getValue().startsWith("/getmark")){
             CHATS.add(mutableComponent);
         }
     }

@@ -105,7 +105,7 @@ public class MarkCommand {
                        .withColor(ChatFormatting.GRAY)
                        .withHoverEvent(finalHoverEvent)
                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/getmark " + Sign.ToTag(finalMark))));
-       ChatType.Bound bind = sourceStack.getLevel().registryAccess().registryOrThrow(Registries.CHAT_TYPE).get(SimpleSign.SIGN_CHAT).bind(sourceStack.getDisplayName());
+       ChatType.Bound bind = ChatType.bind(ChatType.CHAT, sourceStack.getPlayer());
        sourceStack.getServer().getPlayerList()
                .broadcastChatMessage(PlayerChatMessage.unsigned(sourceStack.getPlayer().getUUID(),"")
                        .withUnsignedContent(mutableComponent),sourceStack.getPlayer(),bind);
