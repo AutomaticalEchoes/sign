@@ -28,7 +28,6 @@ public class ClientEvents {
     public static RenderLevelStageEvent.Stage AFTER_BLOCK_ENTITIES;
     public static final AbstractList<Sign> SIGNS = new ArrayList<>();
     public static final Utils.LimitList<MutableComponent> CHATS = new Utils.LimitList<>(10);
-    public static ChatType CHAT_TYPE = null;
 
     @SubscribeEvent
     public static void RenderTick(RenderLevelStageEvent event){
@@ -59,11 +58,9 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void ClientReceivedChat(ClientChatReceivedEvent event){
-        if(CHAT_TYPE == null){
-            Registry<ChatType> registry = Minecraft.getInstance().level.registryAccess().registryOrThrow(Registry.CHAT_TYPE_REGISTRY);
-            CHAT_TYPE = registry.get(SimpleSign.SIGN_CHAT);
-        }
-        if(event.getType() == CHAT_TYPE && event.getMessage() instanceof MutableComponent mutableComponent){
+        if( event.getMessage() instanceof MutableComponent mutableComponent
+                && mutableComponent.getStyle().getClickEvent() != null
+                && mutableComponent.getStyle().getClickEvent().getValue().startsWith("/getmark")){
             CHATS.add(mutableComponent);
         }
     }

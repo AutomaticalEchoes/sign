@@ -9,6 +9,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSigningContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -21,6 +22,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Crypt;
+import net.minecraft.util.Signer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.SlotAccess;
@@ -32,6 +35,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class MarkCommand {
    public static final LiteralArgumentBuilder<CommandSourceStack> MARK =
@@ -109,9 +113,12 @@ public class MarkCommand {
                        .withHoverEvent(finalHoverEvent)
                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/getmark " + Sign.ToTag(finalMark))));
 //       ChatType.Bound bind = sourceStack.getLevel().registryAccess().registryOrThrow(Registry.CHAT_TYPE_REGISTRY).get(SimpleSign.SIGN_CHAT).bind(sourceStack.getDisplayName());
+
+       CommandSigningContext.SignedArguments signingContext = (CommandSigningContext.SignedArguments) sourceStack.getSigningContext();
+       MessageSignature message = new MessageSignature(signingContext.sender(), signingContext.timeStamp(), new Crypt.SaltSignaturePair(0,new byte[0]));
        sourceStack.getServer().getPlayerList()
-               .broadcastChatMessage(PlayerChatMessage.unsigned(Component.empty())
-                       .withUnsignedContent(mutableComponent),sourceStack.getPlayer().asChatSender(),getSign());
+               .broadcastChatMessage(PlayerChatMessage.signed(mutableComponent,message),sourceStack.asChatSender(),ChatType.CHAT);
+//                       .withUnsignedContent(mutableComponent),sourceStack.getPlayer().asChatSender(),getSign());
 
 //       sourceStack.sendSuccess(() ->
 
@@ -145,15 +152,9 @@ public class MarkCommand {
                    ));
            sourceStack.getServer().getPlayerList()
                    .broadcastChatMessage(PlayerChatMessage.unsigned(Component.empty())
-                           .withUnsignedContent(mutableComponent),sourceStack.getPlayer().asChatSender(),getSign());
+                           .withUnsignedContent(mutableComponent),sourceStack.getPlayer().asChatSender(),ChatType.CHAT);
        }
        return 0;
-   }
-
-   public static ResourceKey<ChatType> getSign(){
-       if(SIGN == null)
-           SIGN = ResourceKey.create(Registry.CHAT_TYPE_REGISTRY,SimpleSign.SIGN_CHAT);
-       return SIGN;
    }
 
     @Nullable

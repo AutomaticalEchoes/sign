@@ -23,7 +23,6 @@ public class SimpleSign
     public static final String MODID = "simplesign";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static ResourceLocation SIGN_CHAT = new ResourceLocation("sign");
 
     public SimpleSign()
     {
