@@ -53,8 +53,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void ClientReceivedChat(ClientChatReceivedEvent event){
-        if(event.getPlayerChatMessage().unsignedContent().isPresent() &&
-                event.getPlayerChatMessage().unsignedContent().get() instanceof MutableComponent mutableComponent
+        if(event.getPlayerChatMessage().signedContent().decorated() instanceof MutableComponent mutableComponent
                 && mutableComponent.getStyle().getClickEvent() != null
                 && mutableComponent.getStyle().getClickEvent().getValue().startsWith("/getmark")){
             CHATS.add(mutableComponent);
