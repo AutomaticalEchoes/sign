@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT,modid = SimpleSign.MODID,bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ClientModEvents {
@@ -18,7 +19,11 @@ public class ClientModEvents {
     public static void clientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
         });
-        Keymaps.KEYMAPS.keySet().forEach(ClientRegistry::registerKeyBinding);
+    }
+
+    @SubscribeEvent
+    public static void load(FMLLoadCompleteEvent event){
+        Keymaps.init();
     }
 
     @SubscribeEvent
