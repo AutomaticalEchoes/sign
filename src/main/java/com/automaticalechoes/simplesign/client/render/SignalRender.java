@@ -55,15 +55,11 @@ public class SignalRender {
         Vec3 pos = mark.getPointPos();
         Vec3 subtract = pos.subtract(camera.getPosition());
         double length = subtract.length();
-        Vec3 pointPos = length > 2 ? subtract.normalize().scale(2.0F) : subtract;
+        Vec3 vec3 = new Vec3(camera.getLookVector());
+        float cos = (float) (vec3.dot(subtract) / length);
         MutableComponent distance = Component.literal(DECIMAL_FORMAT.format(length)).append(Component.translatable("B").withStyle(ChatFormatting.GOLD));
-        RenderPoint(pointPos, poseStack, camera, distance, mark.getColor(), minecraft.player.isScoping() ? minecraft.player.getFieldOfViewModifier() * 0.2F : 0.2F,projectionMatrix, mark.getItemStack());
-//        if(!Utils.ShouldRenderBorder() || length > 26) return;
-//        if(mark instanceof BlockSign blockMark && Utils.ShouldRenderBorder()){
-//            BlockState blockState = minecraft.level.getBlockState(blockMark.getBlockPos());
-//            if(!blockState.isAir())
-//                RenderBlock(blockState,blockMark.getBlockPos(),poseStack,camera);
-//        }
+        float scale = length > 4 ? (float) (0.1F * length) * cos : 0.4F;
+        RenderPoint(subtract, poseStack, camera, distance, mark.getColor(), minecraft.player.isScoping() ? minecraft.player.getFieldOfViewModifier() * scale : scale,projectionMatrix, mark.getItemStack());
         minecraft.renderBuffers().bufferSource().endBatch();
     }
 
@@ -84,7 +80,13 @@ public class SignalRender {
         poseStack.mulPose(camera.rotation());
         poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
         if(itemStack != null && Utils.ShouldShowDetail()){
+            poseStack.pushPose();
+            float left = (float) new Vec3(camera.getLeftVector()).dot(pointPos);
+            float up = (float) new Vec3(camera.getUpVector()).dot(pointPos);
+            poseStack.mulPose(Vector3f.YP.rotation((float) (left / pointPos.length())));
+            poseStack.mulPose(Vector3f.XP.rotation((float) (up / pointPos.length())));
             renderItem(itemStack, poseStack, minecraft.renderBuffers().bufferSource());
+            poseStack.popPose();
         }else{
             RenderPointTexture(poseStack, minecraft.renderBuffers().outlineBufferSource(),-1,pointColor);
         }

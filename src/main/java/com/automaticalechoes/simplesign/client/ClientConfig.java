@@ -7,11 +7,20 @@ public class ClientConfig {
     public static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.BooleanValue SHOULD_ENTITY_GLOW;
     public static final ForgeConfigSpec.BooleanValue SHOULD_SHOW_DETAIL;
-
+    public static final ForgeConfigSpec.BooleanValue SHOULD_REGISTER_KEYMAPPING_MARK;
+    public static final ForgeConfigSpec.BooleanValue SHOULD_REGISTER_KEYMAPPING_GET_MARK;
+    public static final ForgeConfigSpec.BooleanValue SHOULD_REGISTER_KEYMAPPING_REMOVE_MARK;
+    public static final ForgeConfigSpec.BooleanValue SHOULD_REGISTER_KEYMAPPING_CLEAR_MARK;
+    public static final ForgeConfigSpec.BooleanValue SHOULD_REGISTER_KEYMAPPING_SIGN_SLOT;
     static {
         BUILDER.push("simple sign config");
         SHOULD_ENTITY_GLOW = BUILDER.define("should show border",true);
         SHOULD_SHOW_DETAIL = BUILDER.define("should show detail(Dev)",true);
+        SHOULD_REGISTER_KEYMAPPING_MARK = BUILDER.define("should register keymapping mark(ctrl + v)", true);
+        SHOULD_REGISTER_KEYMAPPING_GET_MARK = BUILDER.define("should register keymapping get mark(ctrl + g)", true);
+        SHOULD_REGISTER_KEYMAPPING_REMOVE_MARK = BUILDER.define("should register keymapping remove mark(ctrl + r)", true);
+        SHOULD_REGISTER_KEYMAPPING_CLEAR_MARK = BUILDER.define("should register keymapping clear mark(ctrl + c)", true);
+        SHOULD_REGISTER_KEYMAPPING_SIGN_SLOT = BUILDER.define("should register all keymapping of show equipment(ctrl + f)", false);
         BUILDER.pop();
         SPEC=BUILDER.build();
     }
