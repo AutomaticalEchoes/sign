@@ -4,6 +4,7 @@ import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.Utils;
 import com.automaticalechoes.simplesign.common.sign.BlockSign;
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -60,27 +61,12 @@ public class SignalRender {
         Vec3 pos = mark.getPointPos();
         Vec3 subtract = pos.subtract(camera.getPosition());
         double length = subtract.length();
-        Vec3 pointPos = length > 2 ? subtract.normalize().scale(2.0F) : subtract;
+        float cos = (float) (camera.getLookVector().dot(subtract.toVector3f()) / length);
         MutableComponent distance = Component.literal(DECIMAL_FORMAT.format(length)).append(Component.translatable("B").withStyle(ChatFormatting.GOLD));
-        RenderPoint(pointPos, poseStack, camera, distance, mark.getColor(), minecraft.player.isScoping() ? minecraft.player.getFieldOfViewModifier() * 0.2F : 0.2F,projectionMatrix, mark.getItemStack());
-//        if(!Utils.ShouldRenderBorder() || length > 26) return;
-//        if(mark instanceof BlockSign blockMark && Utils.ShouldRenderBorder()){
-//            BlockState blockState = minecraft.level.getBlockState(blockMark.getBlockPos());
-//            if(!blockState.isAir())
-//                RenderBlock(blockState,blockMark.getBlockPos(),poseStack,camera);
-//        }
+        float scale = length > 4 ? (float) (0.1F * length) * cos : 0.4F;
+        RenderPoint(subtract, poseStack, camera, distance, mark.getColor(), minecraft.player.isScoping() ? minecraft.player.getFieldOfViewModifier() * scale : scale,projectionMatrix, mark.getItemStack());
         minecraft.renderBuffers().bufferSource().endBatch();
     }
-
-//    public static void RenderBlock(BlockState blockState,BlockPos pos, PoseStack poseStack, Camera camera){
-//        Vec3 position = camera.getPosition();
-//        poseStack.pushPose();
-//        poseStack.translate(pos.getX() - position.x - 0.005F,pos.getY() - position.y- 0.005F,pos.getZ() - position.z - 0.005F);
-//        poseStack.scale(1.01F,1.01F,1.01F);
-//        minecraft.getBlockRenderer().renderSingleBlock(blockState,poseStack,minecraft.renderBuffers().outlineBufferSource(),15728880,OverlayTexture.NO_OVERLAY);
-////        model.renderToBuffer(poseStack, bufferSource.getBuffer(model.renderType(TextureAtlas.LOCATION_BLOCKS)),0,OverlayTexture.pack(0,10),1.0F,1.0F,1.0F,0.15F);
-//        poseStack.popPose();
-//    }
 
     public static void RenderPoint(Vec3 pointPos, PoseStack poseStack, Camera camera, Component distanceMessage,Color pointColor ,float scale, Matrix4f projectionMatrix, @Nullable ItemStack itemStack){
         poseStack.pushPose();
@@ -89,11 +75,18 @@ public class SignalRender {
         poseStack.mulPose(camera.rotation());
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         if(itemStack != null && Utils.ShouldShowDetail()){
+            poseStack.pushPose();
+            float left = camera.getLeftVector().dot(pointPos.toVector3f());
+            float up = camera.getUpVector().dot(pointPos.toVector3f());
+            poseStack.mulPose(Axis.YP.rotation((float) (left / pointPos.length())));
+            poseStack.mulPose(Axis.XP.rotation((float) (up / pointPos.length())));
             renderItem(itemStack, poseStack, minecraft.renderBuffers().bufferSource());
+            poseStack.popPose();
         }else{
             RenderPointTexture(poseStack, minecraft.renderBuffers().outlineBufferSource(),-1,pointColor);
         }
         int width = minecraft.font.width(distanceMessage);
+
         poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         poseStack.scale(0.05f,0.05f,1);
         minecraft.font.drawInBatch(distanceMessage,- width / 2F ,10,-1,false,poseStack.last().pose(),minecraft.renderBuffers().bufferSource(), Font.DisplayMode.SEE_THROUGH,0,15728880);
