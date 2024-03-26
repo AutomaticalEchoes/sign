@@ -3,6 +3,7 @@ package com.automaticalechoes.simplesign.client.render;
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.Utils;
 import com.automaticalechoes.simplesign.common.sign.BlockSign;
+import com.automaticalechoes.simplesign.common.sign.Sign;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -12,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -36,6 +38,8 @@ import org.joml.Quaternionf;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.Queue;
+import java.util.Stack;
 
 @OnlyIn(Dist.CLIENT)
 public class SignalRender {
@@ -57,40 +61,9 @@ public class SignalRender {
         return initialize;
     }
 
-    public static void RenderMark(com.automaticalechoes.simplesign.common.sign.Sign mark, PoseStack poseStack, Camera camera, Matrix4f projectionMatrix){
-        Vec3 pos = mark.getPointPos();
-        Vec3 subtract = pos.subtract(camera.getPosition());
-        double length = subtract.length();
-        float cos = (float) (camera.getLookVector().dot(subtract.toVector3f()) / length);
-        MutableComponent distance = Component.literal(DECIMAL_FORMAT.format(length)).append(Component.translatable("B").withStyle(ChatFormatting.GOLD));
-        float scale = length > 4 ? (float) (0.1F * length) * cos : 0.4F;
-        RenderPoint(subtract, poseStack, camera, distance, mark.getColor(), minecraft.player.isScoping() ? minecraft.player.getFieldOfViewModifier() * scale : scale,projectionMatrix, mark.getItemStack());
-        minecraft.renderBuffers().bufferSource().endBatch();
-    }
-
-    public static void RenderPoint(Vec3 pointPos, PoseStack poseStack, Camera camera, Component distanceMessage,Color pointColor ,float scale, Matrix4f projectionMatrix, @Nullable ItemStack itemStack){
-        poseStack.pushPose();
-        poseStack.translate(pointPos.x, pointPos.y , pointPos.z);
-        poseStack.scale(scale,scale,scale);
-        poseStack.mulPose(camera.rotation());
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-        if(itemStack != null && Utils.ShouldShowDetail()){
-            poseStack.pushPose();
-            float left = camera.getLeftVector().dot(pointPos.toVector3f());
-            float up = camera.getUpVector().dot(pointPos.toVector3f());
-            poseStack.mulPose(Axis.YP.rotation((float) (left / pointPos.length())));
-            poseStack.mulPose(Axis.XP.rotation((float) (up / pointPos.length())));
-            renderItem(itemStack, poseStack, minecraft.renderBuffers().bufferSource());
-            poseStack.popPose();
-        }else{
-            RenderPointTexture(poseStack, minecraft.renderBuffers().outlineBufferSource(),-1,pointColor);
-        }
+    public static void renderText(PoseStack poseStack, Component distanceMessage){
         int width = minecraft.font.width(distanceMessage);
-
-        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-        poseStack.scale(0.05f,0.05f,1);
-        minecraft.font.drawInBatch(distanceMessage,- width / 2F ,10,-1,false,poseStack.last().pose(),minecraft.renderBuffers().bufferSource(), Font.DisplayMode.SEE_THROUGH,0,15728880);
-        poseStack.popPose();
+        minecraft.font.drawInBatch(distanceMessage, - width / 2F , 10,-1,false,poseStack.last().pose(),minecraft.renderBuffers().bufferSource(), Font.DisplayMode.SEE_THROUGH,0,15728880);
     }
 
     public static void RenderPointTexture(PoseStack p_114083_, MultiBufferSource p_114084_, int p_114085_, Color color) {
@@ -130,6 +103,10 @@ public class SignalRender {
             p_115147_.popPose();
         }
     }
+
+
+
+
 
 
 }

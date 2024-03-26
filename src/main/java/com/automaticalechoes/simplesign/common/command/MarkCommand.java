@@ -4,6 +4,7 @@ import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.common.sign.BlockSign;
 import com.automaticalechoes.simplesign.common.sign.EntitySign;
 import com.automaticalechoes.simplesign.common.sign.Sign;
+import com.automaticalechoes.simplesign.mixin.PlayerListMixin;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -20,6 +21,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.SlotAccess;
@@ -28,9 +31,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.scores.Team;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 public class MarkCommand {
    public static final LiteralArgumentBuilder<CommandSourceStack> MARK =
@@ -105,10 +110,8 @@ public class MarkCommand {
                        .withColor(ChatFormatting.GRAY)
                        .withHoverEvent(finalHoverEvent)
                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/getmark " + Sign.ToTag(finalMark))));
-       ChatType.Bound bind = ChatType.bind(ChatType.CHAT, sourceStack.getPlayer());
-       sourceStack.getServer().getPlayerList()
-               .broadcastChatMessage(PlayerChatMessage.unsigned(sourceStack.getPlayer().getUUID(),"")
-                       .withUnsignedContent(mutableComponent),sourceStack.getPlayer(),bind);
+       SendMessage(sourceStack.getPlayer(), sourceStack.getServer().getPlayerList(), PlayerChatMessage.unsigned(sourceStack.getPlayer().getUUID(),"")
+               .withUnsignedContent(mutableComponent), ChatType.bind(ChatType.CHAT,sourceStack));
 
 //       sourceStack.sendSuccess(() ->
 
@@ -140,12 +143,19 @@ public class MarkCommand {
                    .withStyle(style -> style.withColor(ChatFormatting.GRAY).withHoverEvent(
                            new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(itemStack))
                    ));
-           sourceStack.getServer().getPlayerList()
-                   .broadcastChatMessage(PlayerChatMessage.unsigned(sourceStack.getPlayer().getUUID(),"")
-                           .withUnsignedContent(mutableComponent),sourceStack.getPlayer(),ChatType.bind(ChatType.CHAT,sourceStack));
+           SendMessage(sourceStack.getPlayer(), sourceStack.getServer().getPlayerList(), PlayerChatMessage.unsigned(sourceStack.getPlayer().getUUID(),"")
+                   .withUnsignedContent(mutableComponent), ChatType.bind(ChatType.CHAT,sourceStack));
        }
        return 0;
    }
+    public static void SendMessage(ServerPlayer serverPlayer, PlayerList playerList, PlayerChatMessage playerChatMessage , ChatType.Bound bound){
+        ((PlayerListMixin)playerList).invokeBroadcastChatMessage(playerChatMessage, serverPlayer1 -> {
+            if(serverPlayer.getTeam() == null) return true;
+            Team team1 = serverPlayer1.getTeam();
+            if(team1 == serverPlayer.getTeam()) return true;
+            return false;
+        }, serverPlayer, bound);
+    }
 
     @Nullable
     private static EquipmentSlot getEquipmentSlot(int p_147212_) {
@@ -163,4 +173,5 @@ public class MarkCommand {
             return p_147212_ == 99 ? EquipmentSlot.OFFHAND : null;
         }
     }
+
 }
