@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 public interface Sign {
+     String RENDER_TYPE = "point_render_type";
      String TYPE = "mark_type";
      HashMap<String, Type> MARK_TYPES = new HashMap<>();
      Type BLOCK = Register("block", BlockSign::new);
@@ -20,6 +21,8 @@ public interface Sign {
      String ITEM = "show_item";
 
      Type getMarkType();
+
+     RenderType getRenderType();
      Vec3 getPointPos();
      CompoundTag CreateTag();
      @OnlyIn(Dist.CLIENT)
@@ -28,7 +31,6 @@ public interface Sign {
      Color getColor();
      @Nullable
      ItemStack getItemStack();
-
 
      static Sign FromTag(Tag tag){
           if(tag instanceof CompoundTag compoundTag){
@@ -42,9 +44,9 @@ public interface Sign {
           CompoundTag compoundTag = mark.CreateTag();
           String name = mark.getMarkType().Name();
           compoundTag.putString(TYPE,name);
+          mark.getRenderType().toTag(compoundTag);
           return compoundTag;
      }
-
 
      static Type Register(String name, Function<CompoundTag, Sign> Builder){
           Type type = new Type(name, Builder);
@@ -58,5 +60,29 @@ public interface Sign {
      }
 
      record Type(String Name,Function<CompoundTag, Sign> Builder) {
+     }
+
+     enum RenderType {
+          DEFAULT(0),
+          FOCUS(1),
+          CARE(2),
+          QUESTION(3);
+          final int num;
+          static RenderType[] TYPES = new RenderType[]{DEFAULT,FOCUS,CARE,QUESTION};
+          RenderType(int num){
+               this.num = num;
+          }
+
+          public static RenderType fromTag(CompoundTag tag){
+               if(tag.contains(RENDER_TYPE)){
+                    int anInt = tag.getInt(RENDER_TYPE);
+                    return TYPES[anInt];
+               }
+               return DEFAULT;
+          }
+
+          public void toTag(CompoundTag compoundTag){
+               compoundTag.putInt(RENDER_TYPE,num);
+          }
      }
 }

@@ -78,7 +78,7 @@ public class SignManager extends Utils.LimitList<Sign> {
                     SignalRender.renderItem(itemStack, poseStack, bufferSource);
                     poseStack.popPose();
                 }else{
-                    SignalRender.RenderPointTexture(poseStack, mc.renderBuffers().outlineBufferSource(),-1,color);
+                    SignalRender.RenderPointTexture(poseStack, sign.getRenderType(), mc.renderBuffers().outlineBufferSource(),-1,color);
                 }
 
                 poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
@@ -94,7 +94,7 @@ public class SignManager extends Utils.LimitList<Sign> {
                 poseStack.translate(20 * renderPos.x, 20 * renderPos.y, 20 * renderPos.z);
                 poseStack.mulPose(mainCamera.rotation());
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                SignalRender.RenderPointTexture(poseStack, mc.renderBuffers().outlineBufferSource(),-1,color);
+                SignalRender.RenderPointTexture(poseStack, sign.getRenderType(), mc.renderBuffers().outlineBufferSource(),-1,color);
                 poseStack.popPose();
             }
             bufferSource.endBatch();

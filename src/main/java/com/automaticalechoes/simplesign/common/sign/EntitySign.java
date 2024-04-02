@@ -1,22 +1,15 @@
 package com.automaticalechoes.simplesign.common.sign;
 
-import com.automaticalechoes.simplesign.SimpleSign;
-import com.mojang.serialization.DataResult;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-
 import java.awt.*;
 import java.util.UUID;
 
@@ -26,19 +19,26 @@ public class EntitySign implements Sign {
     @Nullable
     protected Entity entity;
     protected final BlockPos pos;
+    protected final RenderType renderType;
     protected final UUID uuid;
     protected final ItemStack itemStack;
 
     public EntitySign(UUID uuid, BlockPos pos, @Nullable ItemStack itemStack){
+       this(uuid, pos, null, itemStack);
+    }
+
+    public EntitySign(UUID uuid, BlockPos pos, @Nullable RenderType renderType, @Nullable ItemStack itemStack){
         this.uuid = uuid;
         this.pos = pos;
         this.itemStack = itemStack;
+        this.renderType = renderType == null? RenderType.DEFAULT : renderType;
     }
 
     public EntitySign(CompoundTag compoundTag){
         this.uuid = compoundTag.getUUID(UUID);
         this.pos = BlockPos.of(compoundTag.getLong(BLOCK_POS));
         this.itemStack = compoundTag.contains(ITEM)? ItemStack.of(compoundTag.getCompound(ITEM)) : null;
+        this.renderType = RenderType.fromTag(compoundTag);
     }
 
     @Override
@@ -75,6 +75,11 @@ public class EntitySign implements Sign {
         if(obj.getClass() != this.getClass()) return false;
         EntitySign obj1 = (EntitySign) obj;
         return obj1.pos.equals(this.pos) && obj1.uuid.equals(this.uuid);
+    }
+
+    @Override
+    public RenderType getRenderType() {
+        return this.renderType;
     }
 
     @Override

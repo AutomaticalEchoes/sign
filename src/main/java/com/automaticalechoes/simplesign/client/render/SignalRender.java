@@ -45,8 +45,10 @@ import java.util.Stack;
 public class SignalRender {
     private static final ModelResourceLocation TRIDENT_MODEL = ModelResourceLocation.vanilla("trident", "inventory");
     private static final ModelResourceLocation SPYGLASS_MODEL = ModelResourceLocation.vanilla("spyglass", "inventory");
-    public static final  DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##0.00");
-    protected static ResourceLocation RESOURCE = new ResourceLocation(SimpleSign.MODID,"textures/point.png");
+    protected static ResourceLocation RESOURCE_DEFAULT = new ResourceLocation(SimpleSign.MODID,"textures/point_render/default.png");
+    protected static ResourceLocation RESOURCE_CARE = new ResourceLocation(SimpleSign.MODID,"textures/point_render/care.png");
+    protected static ResourceLocation RESOURCE_FOCUS = new ResourceLocation(SimpleSign.MODID,"textures/point_render/focus.png");
+    protected static ResourceLocation RESOURCE_QUESTION = new ResourceLocation(SimpleSign.MODID,"textures/point_render/question.png");
     protected static Minecraft minecraft;
     protected static ItemRenderer itemRenderer;
     protected static boolean initialize = false;
@@ -66,13 +68,13 @@ public class SignalRender {
         minecraft.font.drawInBatch(distanceMessage, - width / 2F , 10,-1,false,poseStack.last().pose(),minecraft.renderBuffers().bufferSource(), Font.DisplayMode.SEE_THROUGH,0,15728880);
     }
 
-    public static void RenderPointTexture(PoseStack p_114083_, MultiBufferSource p_114084_, int p_114085_, Color color) {
+    public static void RenderPointTexture(PoseStack p_114083_, Sign.RenderType renderType, MultiBufferSource p_114084_, int p_114085_, Color color) {
         p_114083_.pushPose();
         p_114083_.mulPose(Axis.ZP.rotationDegrees(45.0F));
         PoseStack.Pose posestack$pose = p_114083_.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();
-        VertexConsumer vertexconsumer = p_114084_.getBuffer(RenderType.textIntensitySeeThrough(RESOURCE));
+        VertexConsumer vertexconsumer = p_114084_.getBuffer(RenderType.textIntensitySeeThrough(resourceLocation(renderType)));
         vertex(vertexconsumer, matrix4f, matrix3f, p_114085_, 0.0F, 0.0F, 0.0F, 0.0F, color);
         vertex(vertexconsumer, matrix4f, matrix3f, p_114085_, 1.0F, 0.0F, 1.0F, 0.0F, color);
         vertex(vertexconsumer, matrix4f, matrix3f, p_114085_, 1.0F, 1.0F, 1.0F, 1.0F, color);
@@ -105,7 +107,14 @@ public class SignalRender {
     }
 
 
-
+    public static ResourceLocation resourceLocation(Sign.RenderType renderType) {
+        return switch (renderType){
+            case DEFAULT -> RESOURCE_DEFAULT;
+            case FOCUS -> RESOURCE_FOCUS;
+            case CARE -> RESOURCE_CARE;
+            case QUESTION -> RESOURCE_QUESTION;
+        };
+    }
 
 
 
