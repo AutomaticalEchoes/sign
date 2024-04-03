@@ -68,7 +68,6 @@ public interface Sign {
           CARE(2),
           QUESTION(3);
           final int num;
-          static RenderType[] TYPES = new RenderType[]{DEFAULT,FOCUS,CARE,QUESTION};
           RenderType(int num){
                this.num = num;
           }
@@ -76,7 +75,7 @@ public interface Sign {
           public static RenderType fromTag(CompoundTag tag){
                if(tag.contains(RENDER_TYPE)){
                     int anInt = tag.getInt(RENDER_TYPE);
-                    return TYPES[anInt];
+                    return values()[anInt];
                }
                return DEFAULT;
           }
