@@ -19,23 +19,23 @@ public class BlockSign implements Sign {
     private final BlockPos blockPos;
     private final ResourceLocation blockType;
 
-    protected final RenderType renderType;
+    protected final Type renderType;
 
     public BlockSign(BlockPos blockPos , ResourceLocation resourceLocation){
         this(blockPos, resourceLocation, null);
     }
 
-    public BlockSign(BlockPos blockPos, ResourceLocation resourceLocation, @Nullable RenderType renderType){
+    public BlockSign(BlockPos blockPos, ResourceLocation resourceLocation, @Nullable Type renderType){
         this.blockPos = blockPos;
         this.blockType = resourceLocation;
-        this.renderType = renderType == null ? RenderType.DEFAULT : renderType;
+        this.renderType = renderType == null ? Type.DEFAULT : renderType;
     }
 
     public BlockSign(CompoundTag compoundTag){
         long aLong = compoundTag.getLong(BLOCK_POS);
         this.blockPos = BlockPos.of(aLong);
         this.blockType = ResourceLocation.tryParse(compoundTag.getString(BLOCK_TYPE));
-        this.renderType = RenderType.fromTag(compoundTag);
+        this.renderType = Type.fromTag(compoundTag);
     }
 
     public CompoundTag CreateTag(){
@@ -66,12 +66,12 @@ public class BlockSign implements Sign {
     }
 
     @Override
-    public Type getMarkType() {
+    public TargetType getTargetType() {
         return BLOCK;
     }
 
     @Override
-    public RenderType getRenderType() {
+    public Type getType() {
         return this.renderType;
     }
 

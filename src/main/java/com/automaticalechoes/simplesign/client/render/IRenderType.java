@@ -1,4 +1,4 @@
-package com.automaticalechoes.simplesign.client;
+package com.automaticalechoes.simplesign.client.render;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;

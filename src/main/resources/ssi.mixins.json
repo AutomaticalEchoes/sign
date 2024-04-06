@@ -6,10 +6,11 @@
   "refmap": "ssi.refmap.json",
   "plugin": "com.automaticalechoes.simplesign.mixin.MixinPlugin",
   "mixins": [
-    "PlayerListMixin"
+    "PlayerListMixin",
+    "PlayerMixin"
   ],
   "client": [
-    "GameRenderMixin",
+    "IFrustum",
     "LevelRenderMixin",
     "MinecraftMixin"
   ],

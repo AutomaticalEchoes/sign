@@ -2,7 +2,10 @@ package com.automaticalechoes.simplesign;
 
 import com.automaticalechoes.simplesign.client.ClientConfig;
 import com.automaticalechoes.simplesign.client.Utils;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.logging.LogUtils;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,6 +23,8 @@ public class SimpleSign
     public static final String MODID = "simplesign";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final LiteralArgumentBuilder<CommandSourceStack> SSI =
+            Commands.literal("ssi").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
 
     public SimpleSign()
     {

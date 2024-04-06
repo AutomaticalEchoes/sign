@@ -2,46 +2,33 @@ package com.automaticalechoes.simplesign.client.render;
 
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.Utils;
-import com.automaticalechoes.simplesign.common.sign.BlockSign;
 import com.automaticalechoes.simplesign.common.sign.Sign;
 import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
-import javax.annotation.Nullable;
 import java.awt.*;
-import java.text.DecimalFormat;
-import java.util.Queue;
-import java.util.Stack;
 
 @OnlyIn(Dist.CLIENT)
+@Deprecated
 public class SignalRender {
     private static final ModelResourceLocation TRIDENT_MODEL = ModelResourceLocation.vanilla("trident", "inventory");
     private static final ModelResourceLocation SPYGLASS_MODEL = ModelResourceLocation.vanilla("spyglass", "inventory");
@@ -68,7 +55,7 @@ public class SignalRender {
         minecraft.font.drawInBatch(distanceMessage, - width / 2F , 10,-1,false,poseStack.last().pose(),minecraft.renderBuffers().bufferSource(), Font.DisplayMode.SEE_THROUGH,0,15728880);
     }
 
-    public static void RenderPointTexture(PoseStack p_114083_, Sign.RenderType renderType, MultiBufferSource p_114084_, int p_114085_, Color color) {
+    public static void RenderPointTexture(PoseStack p_114083_, Sign.Type renderType, MultiBufferSource p_114084_, int p_114085_, Color color) {
         p_114083_.pushPose();
         p_114083_.mulPose(Axis.ZP.rotationDegrees(45.0F));
         PoseStack.Pose posestack$pose = p_114083_.last();
@@ -83,7 +70,7 @@ public class SignalRender {
     }
 
     private static void vertex(VertexConsumer p_254095_, Matrix4f p_254477_, Matrix3f p_253948_, int p_253829_, float x, float y, float uvx, float uvy,Color color) {
-        p_254095_.vertex(p_254477_, x- 0.5F, y - 0.5F, 0.0F).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(uvx, uvy).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_253829_).normal(p_253948_, 0.0F, 1.0F, 0.0F).endVertex();
+        p_254095_.vertex(p_254477_, x - 0.5F, y - 0.5F, 0.0F).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(uvx, uvy).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_253829_).normal(p_253948_, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     public static void renderItem(ItemStack p_115144_,  PoseStack p_115147_, MultiBufferSource p_115148_) {
@@ -107,7 +94,7 @@ public class SignalRender {
     }
 
 
-    public static ResourceLocation resourceLocation(Sign.RenderType renderType) {
+    public static ResourceLocation resourceLocation(Sign.Type renderType) {
         return switch (renderType){
             case DEFAULT -> RESOURCE_DEFAULT;
             case FOCUS -> RESOURCE_FOCUS;

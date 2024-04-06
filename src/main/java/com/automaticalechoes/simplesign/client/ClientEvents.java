@@ -3,6 +3,7 @@ package com.automaticalechoes.simplesign.client;
 import com.automaticalechoes.simplesign.client.command.ClientGetMarkCommand;
 import com.automaticalechoes.simplesign.client.command.ClientSettingCommand;
 import com.automaticalechoes.simplesign.client.keys.Keymaps;
+import com.automaticalechoes.simplesign.client.sign.SignManager;
 import com.automaticalechoes.simplesign.client.render.SignalRender;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,13 +17,23 @@ public class ClientEvents {
     public static final SignManager SIGNS = new SignManager(15);
     public static final Utils.LimitList<MutableComponent> CHATS = new Utils.LimitList<>(10);
 
+
+    @SubscribeEvent
+    public static void Render(RenderGuiOverlayEvent.Post event){
+        if(event.getOverlay().overlay() == VanillaGuiOverlay.HOTBAR.type().overlay()){
+            SIGNS.render2D(event);
+//            SIGNS.renderViewRot(event);
+        }
+    }
+
+
     @SubscribeEvent
     public static void RenderTick(RenderLevelStageEvent event){
         if(!SignalRender.isInitialize()){
             SignalRender.init();
         }
         if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES){
-            SIGNS.renderTick(event);
+            SIGNS.render3D(event);
         }
     }
 
@@ -31,7 +42,7 @@ public class ClientEvents {
     public static void ClientReceivedChat(ClientChatReceivedEvent.Player event){
         if( event.getPlayerChatMessage().unsignedContent() instanceof MutableComponent mutableComponent
                 && mutableComponent.getStyle().getClickEvent() != null
-                && mutableComponent.getStyle().getClickEvent().getValue().startsWith("/getmark")){
+                && mutableComponent.getStyle().getClickEvent().getValue().startsWith("/ssi getmark")){
             CHATS.add(mutableComponent);
         }
     }

@@ -19,7 +19,7 @@ public class EntitySign implements Sign {
     @Nullable
     protected Entity entity;
     protected final BlockPos pos;
-    protected final RenderType renderType;
+    protected final Type renderType;
     protected final UUID uuid;
     protected final ItemStack itemStack;
 
@@ -27,18 +27,18 @@ public class EntitySign implements Sign {
        this(uuid, pos, null, itemStack);
     }
 
-    public EntitySign(UUID uuid, BlockPos pos, @Nullable RenderType renderType, @Nullable ItemStack itemStack){
+    public EntitySign(UUID uuid, BlockPos pos, @Nullable Type renderType, @Nullable ItemStack itemStack){
         this.uuid = uuid;
         this.pos = pos;
         this.itemStack = itemStack;
-        this.renderType = renderType == null? RenderType.DEFAULT : renderType;
+        this.renderType = renderType == null? Type.DEFAULT : renderType;
     }
 
     public EntitySign(CompoundTag compoundTag){
         this.uuid = compoundTag.getUUID(UUID);
         this.pos = BlockPos.of(compoundTag.getLong(BLOCK_POS));
         this.itemStack = compoundTag.contains(ITEM)? ItemStack.of(compoundTag.getCompound(ITEM)) : null;
-        this.renderType = RenderType.fromTag(compoundTag);
+        this.renderType = Type.fromTag(compoundTag);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class EntitySign implements Sign {
     }
 
     @Override
-    public Type getMarkType() {
+    public TargetType getTargetType() {
         return ENTITY;
     }
 
@@ -78,7 +78,7 @@ public class EntitySign implements Sign {
     }
 
     @Override
-    public RenderType getRenderType() {
+    public Type getType() {
         return this.renderType;
     }
 
