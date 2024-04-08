@@ -1,5 +1,8 @@
 {
-  "sign.post_sign": "Post mark",
+  "sign.post_sign_default": "Post mark,Type: DEFAULT",
+  "sign.post_sign_care": "Post mark,Type: CARE",
+  "sign.post_sign_focus": "Post mark,Type: FOCUS",
+  "sign.post_sign_quest": "Post mark,Type: QUEST",
   "sign.get_sign": "Track the latest post mark",
   "sign.remove_sign": "Removes the recently enabled tracking mark",
   "sign.clear_sign": "Remove all tracking mark",

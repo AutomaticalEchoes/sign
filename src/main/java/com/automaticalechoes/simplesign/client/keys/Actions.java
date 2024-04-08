@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class Actions {
     public static final AbstractList<ClientSign> SIGNS = ClientEvents.SIGNS;
     public static final Utils.LimitList<MutableComponent> CHATS = ClientEvents.CHATS;
-    public static void PostSign(){
+    public static void PostSign(Sign.Type type){
         HitResult hitResult = Utils.IPick(1.0F);
         String message = "";
         if(hitResult instanceof BlockHitResult blockHitResult && blockHitResult.getType() != HitResult.Type.MISS){
@@ -36,7 +36,7 @@ public class Actions {
             message = entityHitResult.getEntity().getUUID().toString();
         }
         if(message.equals("")) return;
-        String s1 = SharedConstants.filterText("/ssi mark DEFAULT " + message);
+        String s1 = SharedConstants.filterText("/ssi mark " + type.name() + message);
         SendCommand(s1);
 
     }

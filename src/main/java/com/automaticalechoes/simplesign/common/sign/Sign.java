@@ -63,24 +63,18 @@ public interface Sign {
      }
 
      enum Type {
-          DEFAULT(0, "default"),
-          FOCUS(1, "focus"),
-          CARE(2, "care"),
-          QUESTION(3, "question");
+          DEFAULT(0),
+          FOCUS(1),
+          CARE(2),
+          QUESTION(3);
           final int num;
-          final String name;
           static Type[] TYPES = new Type[]{DEFAULT,FOCUS,CARE,QUESTION};
-          Type(int num, String name){
+          Type(int num){
                this.num = num;
-               this.name = name;
           }
 
           public int getNum() {
                return num;
-          }
-
-          public String getName() {
-               return name;
           }
 
           public static Type fromTag(CompoundTag tag){

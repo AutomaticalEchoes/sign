@@ -1,5 +1,8 @@
 {
-  "sign.post_sign": "标记",
+  "sign.post_sign_default": "标记:默认",
+  "sign.post_sign_care": "标记:小心",
+  "sign.post_sign_focus": "标记:集合",
+  "sign.post_sign_quest": "标记:疑问",
   "sign.get_sign": "获取标记并追踪",
   "sign.remove_sign": "移除最近启用追踪的标记",
   "sign.clear_sign": "移除所有正在追踪的标记",
