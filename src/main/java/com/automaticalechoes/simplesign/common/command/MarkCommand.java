@@ -32,6 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.scores.Team;
+import net.minecraftforge.client.ClientCommandSourceStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.command.EnumArgument;
 
@@ -69,6 +70,7 @@ public class MarkCommand {
    }
 
    public static int Mark(CommandSourceStack sourceStack, @Nullable Sign.Type renderType, @Nullable BlockPos pos, @Nullable Entity entity) throws CommandSyntaxException {
+       if(sourceStack instanceof ClientCommandSourceStack) throw new CommandSyntaxException(CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand(), Component.literal("can not run in client")) ;
 //       Component senderName = sourceStack.getPlayer().getName();
        HoverEvent hoverEvent = null;
        MutableComponent markName = Component.empty();

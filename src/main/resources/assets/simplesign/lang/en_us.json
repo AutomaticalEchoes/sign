@@ -10,6 +10,7 @@
   "sign.source_discord": "target lost",
   "sign.exist": "already tracking",
   "sign.self": "can not track yourself",
+  "sign.no_useful_time": "no available signal",
 
   "sign.none": ",nothing on there",
   "sign._s": "'s ",
