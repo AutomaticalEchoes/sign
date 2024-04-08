@@ -1,6 +1,8 @@
 package com.automaticalechoes.simplesign.client.command;
 
+import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
+import com.automaticalechoes.simplesign.client.sign.ClientSign;
 import com.automaticalechoes.simplesign.common.sign.EntitySign;
 import com.automaticalechoes.simplesign.common.sign.Sign;
 import com.mojang.brigadier.CommandDispatcher;
@@ -22,14 +24,15 @@ public class ClientGetMarkCommand {
             Commands.argument("nbt", NbtTagArgument.nbtTag());
 
     public static void register(CommandDispatcher<CommandSourceStack> p_249870_) {
-        p_249870_.register(GETMARK
-                .then(NBT.executes(context -> GetMark(context.getSource(), NbtTagArgument.getNbtTag(context,"nbt")))));
+        p_249870_.register(SimpleSign.SSI
+                .then(GETMARK
+                        .then(NBT.executes(context -> GetMark(context.getSource(), NbtTagArgument.getNbtTag(context,"nbt"))))));
     }
 
     public static int GetMark(CommandSourceStack sourceStack,Tag nbt){
         Sign mark = Sign.FromTag(nbt);
         if(mark != null){
-            if(CheckMark(sourceStack,mark)) ClientEvents.SIGNS.add(mark);
+            if(CheckMark(sourceStack,mark)) ClientEvents.SIGNS.add(new ClientSign(mark));
         } else{
             sourceStack.sendFailure(Component.translatable("sign.unvalid_mark"));
         }

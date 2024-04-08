@@ -14,15 +14,15 @@ import java.util.function.Function;
 
 public interface Sign {
      String RENDER_TYPE = "point_render_type";
-     String TYPE = "mark_type";
-     HashMap<String, Type> MARK_TYPES = new HashMap<>();
-     Type BLOCK = Register("block", BlockSign::new);
-     Type ENTITY = Register("entity", EntitySign::new);
+     String TARGET_TYPE = "target_type";
+     HashMap<String, TargetType> TARGET_TYPES = new HashMap<>();
+     TargetType BLOCK = Register("block", BlockSign::new);
+     TargetType ENTITY = Register("entity", EntitySign::new);
      String ITEM = "show_item";
 
-     Type getMarkType();
+     TargetType getTargetType();
 
-     RenderType getRenderType();
+     Type getType();
      Vec3 getPointPos();
      CompoundTag CreateTag();
      @OnlyIn(Dist.CLIENT)
@@ -34,7 +34,7 @@ public interface Sign {
 
      static Sign FromTag(Tag tag){
           if(tag instanceof CompoundTag compoundTag){
-               String name = compoundTag.getString(TYPE);
+               String name = compoundTag.getString(TARGET_TYPE);
                return GetBuilder(name).apply(compoundTag);
           }
          return null;
@@ -42,40 +42,51 @@ public interface Sign {
 
      static CompoundTag ToTag(Sign mark){
           CompoundTag compoundTag = mark.CreateTag();
-          String name = mark.getMarkType().Name();
-          compoundTag.putString(TYPE,name);
-          mark.getRenderType().toTag(compoundTag);
+          String name = mark.getTargetType().Name();
+          compoundTag.putString(TARGET_TYPE,name);
+          mark.getType().toTag(compoundTag);
           return compoundTag;
      }
 
-     static Type Register(String name, Function<CompoundTag, Sign> Builder){
-          Type type = new Type(name, Builder);
-          MARK_TYPES.put(name,type);
+     static TargetType Register(String name, Function<CompoundTag, Sign> Builder){
+          TargetType type = new TargetType(name, Builder);
+          TARGET_TYPES.put(name,type);
           return type;
      }
 
      static Function<CompoundTag, Sign> GetBuilder(String name){
-          Type type = MARK_TYPES.get(name);
+          TargetType type = TARGET_TYPES.get(name);
           return type.Builder();
      }
 
-     record Type(String Name,Function<CompoundTag, Sign> Builder) {
+     record TargetType(String Name, Function<CompoundTag, Sign> Builder) {
      }
 
-     enum RenderType {
-          DEFAULT(0),
-          FOCUS(1),
-          CARE(2),
-          QUESTION(3);
+     enum Type {
+          DEFAULT(0, "default"),
+          FOCUS(1, "focus"),
+          CARE(2, "care"),
+          QUESTION(3, "question");
           final int num;
-          RenderType(int num){
+          final String name;
+          static Type[] TYPES = new Type[]{DEFAULT,FOCUS,CARE,QUESTION};
+          Type(int num, String name){
                this.num = num;
+               this.name = name;
           }
 
-          public static RenderType fromTag(CompoundTag tag){
+          public int getNum() {
+               return num;
+          }
+
+          public String getName() {
+               return name;
+          }
+
+          public static Type fromTag(CompoundTag tag){
                if(tag.contains(RENDER_TYPE)){
                     int anInt = tag.getInt(RENDER_TYPE);
-                    return values()[anInt];
+                    return TYPES[anInt];
                }
                return DEFAULT;
           }

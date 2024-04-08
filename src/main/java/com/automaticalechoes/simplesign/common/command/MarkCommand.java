@@ -1,12 +1,12 @@
 package com.automaticalechoes.simplesign.common.command;
 
 import com.automaticalechoes.simplesign.SimpleSign;
+import com.automaticalechoes.simplesign.common.Iplayers;
 import com.automaticalechoes.simplesign.common.sign.BlockSign;
 import com.automaticalechoes.simplesign.common.sign.EntitySign;
 import com.automaticalechoes.simplesign.common.sign.Sign;
 import com.automaticalechoes.simplesign.mixin.PlayerListMixin;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -19,7 +19,6 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,28 +33,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.scores.Team;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.command.EnumArgument;
 
 import javax.annotation.Nullable;
-import java.util.function.Predicate;
 
 public class MarkCommand {
-    public static final LiteralArgumentBuilder<CommandSourceStack> SSI =
-            Commands.literal("ssi").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
     public static final LiteralArgumentBuilder<CommandSourceStack> MARK =
             Commands.literal("mark").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
-    public static final LiteralArgumentBuilder<CommandSourceStack> CARE =
-            Commands.literal("care").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
-    public static final LiteralArgumentBuilder<CommandSourceStack> FOCUS =
-            Commands.literal("focus").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
-    public static final LiteralArgumentBuilder<CommandSourceStack> QUEST =
-            Commands.literal("quest").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
-
-   public static final RequiredArgumentBuilder<CommandSourceStack, Coordinates> BLOCKPOS =
-           Commands.argument("blockPos", BlockPosArgument.blockPos());
-   public static final RequiredArgumentBuilder<CommandSourceStack, EntitySelector> ENTITY =
-           Commands.argument("entity", EntityArgument.entity());
-   public static final RequiredArgumentBuilder<CommandSourceStack,Integer> SLOT =
-           Commands.argument("equip", SlotArgument.slot());
+    public static final RequiredArgumentBuilder<CommandSourceStack, Sign.Type> SIGN =
+            Commands.argument("sign_type", EnumArgument.enumArgument(Sign.Type.class));
+    public static final RequiredArgumentBuilder<CommandSourceStack, Coordinates> BLOCKPOS =
+            Commands.argument("blockPos", BlockPosArgument.blockPos());
+    public static final RequiredArgumentBuilder<CommandSourceStack, EntitySelector> ENTITY =
+            Commands.argument("entity", EntityArgument.entity());
+    public static final RequiredArgumentBuilder<CommandSourceStack, Integer> SLOT =
+            Commands.argument("equip", SlotArgument.slot());
 
    public static final MutableComponent MARKED = Component.translatable("sign.marked");
    public static final MutableComponent AT = Component.translatable("sign.at");
@@ -68,28 +60,24 @@ public class MarkCommand {
    public static final Style STYLE_BLOCK_POS = Style.EMPTY.applyFormats(ChatFormatting.AQUA);
 
    public static void register(CommandDispatcher<CommandSourceStack> p_249870_) {
-       p_249870_.register(SSI
+       p_249870_.register(SimpleSign.SSI
                .then(MARK
-                       .then(ENTITY.executes(context -> Mark(context.getSource(), 0, null,EntityArgument.getEntity(context,"entity")))
-                               .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
-                       .then(BLOCKPOS.executes(context -> Mark(context.getSource(), 0, BlockPosArgument.getBlockPos(context,"blockPos"),null))))
-               .then(FOCUS
-                       .then(ENTITY.executes(commandContext -> Mark(commandContext.getSource(), 1, null, EntityArgument.getEntity(commandContext, "entity"))))
-                       .then(BLOCKPOS.executes(commandContext -> Mark(commandContext.getSource(), 1, BlockPosArgument.getBlockPos(commandContext,"blockPos"),null))))
-               .then(CARE
-                       .then(ENTITY.executes(commandContext -> Mark(commandContext.getSource(), 2, null, EntityArgument.getEntity(commandContext, "entity"))))
-                       .then(BLOCKPOS.executes(commandContext -> Mark(commandContext.getSource(), 2, BlockPosArgument.getBlockPos(commandContext,"blockPos"),null))))
-               .then(QUEST
-                       .then(ENTITY.executes(commandContext -> Mark(commandContext.getSource(), 3, null, EntityArgument.getEntity(commandContext, "entity"))))
-                       .then(BLOCKPOS.executes(commandContext -> Mark(commandContext.getSource(), 3, BlockPosArgument.getBlockPos(commandContext,"blockPos"),null))))
-       );
+                       .then(SIGN
+                               .then(ENTITY.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Sign.Type.class),null ,EntityArgument.getEntity(context,"entity")))
+                                       .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
+                               .then(BLOCKPOS.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Sign.Type.class), BlockPosArgument.getBlockPos(context,"blockPos"),null))))));
    }
 
-   public static int Mark(CommandSourceStack sourceStack, int typeNum, @Nullable BlockPos pos, @Nullable Entity entity) throws CommandSyntaxException {
+   public static int Mark(CommandSourceStack sourceStack, @Nullable Sign.Type renderType, @Nullable BlockPos pos, @Nullable Entity entity) throws CommandSyntaxException {
 //       Component senderName = sourceStack.getPlayer().getName();
        HoverEvent hoverEvent = null;
        MutableComponent markName = Component.empty();
        MutableComponent posMessage = Component.empty().withStyle(STYLE_BLOCK_POS);
+       ServerPlayer player = sourceStack.getPlayer();
+       if(player == null || !((Iplayers)player).canUse()){
+           sourceStack.sendFailure(Component.translatable("sign.no_useful_time"));
+           return 0;
+       }
        Sign mark = null;
        ItemStack itemStack = null;
        if(pos != null){
@@ -97,7 +85,7 @@ public class MarkCommand {
            markName.append(block.getName()).withStyle(STYLE_BLOCK);
            posMessage.append(Component.translatable(" [" + pos.toShortString() + "]"));
            ResourceLocation key = ForgeRegistries.BLOCKS.getKey(block);
-           mark = new BlockSign(pos, key, Sign.RenderType.values()[typeNum]);
+           mark = new BlockSign(pos, key, renderType);
        }else if(entity != null){
            if(entity instanceof ItemEntity || (entity instanceof ItemFrame itemFrame && !itemFrame.getItem().isEmpty())){
                itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
@@ -109,7 +97,7 @@ public class MarkCommand {
                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ENTITY,new HoverEvent.EntityTooltipInfo(entity.getType(),entity.getUUID(),entity.getDisplayName()));
            }
            posMessage.append(Component.translatable(" [" + entity.blockPosition().toShortString() + "]"));
-           mark = new EntitySign(entity.getUUID(), entity.blockPosition(), Sign.RenderType.values()[typeNum], itemStack);
+           mark = new EntitySign(entity.getUUID(), entity.blockPosition(), renderType, itemStack);
        }
 
        if(mark == null){
@@ -130,8 +118,8 @@ public class MarkCommand {
                .withStyle(style -> style
                        .withColor(ChatFormatting.GRAY)
                        .withHoverEvent(finalHoverEvent)
-                       .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/getmark " + Sign.ToTag(finalMark))));
-       SendMessage(sourceStack.getPlayer(), sourceStack.getServer().getPlayerList(), PlayerChatMessage.unsigned(sourceStack.getPlayer().getUUID(),"")
+                       .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi getmark " + Sign.ToTag(finalMark))));
+       SendMessage(player, sourceStack.getServer().getPlayerList(), PlayerChatMessage.unsigned(player.getUUID(),"")
                .withUnsignedContent(mutableComponent), ChatType.bind(ChatType.CHAT,sourceStack));
        return 1;
    }
@@ -166,8 +154,6 @@ public class MarkCommand {
        }
        return 0;
    }
-
-
     public static void SendMessage(ServerPlayer serverPlayer, PlayerList playerList, PlayerChatMessage playerChatMessage , ChatType.Bound bound){
         ((PlayerListMixin)playerList).invokeBroadcastChatMessage(playerChatMessage, serverPlayer1 -> {
             if(serverPlayer.getTeam() == null) return true;
@@ -175,6 +161,7 @@ public class MarkCommand {
             if(team1 == serverPlayer.getTeam()) return true;
             return false;
         }, serverPlayer, bound);
+        ((Iplayers)serverPlayer).trigger();
     }
 
     @Nullable

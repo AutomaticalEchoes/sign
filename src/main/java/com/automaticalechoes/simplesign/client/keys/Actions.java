@@ -3,6 +3,7 @@ package com.automaticalechoes.simplesign.client.keys;
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
 import com.automaticalechoes.simplesign.client.Utils;
+import com.automaticalechoes.simplesign.client.sign.ClientSign;
 import com.automaticalechoes.simplesign.common.sign.EntitySign;
 import com.automaticalechoes.simplesign.common.sign.Sign;
 import net.minecraft.SharedConstants;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 @OnlyIn(Dist.CLIENT)
 public class Actions {
-    public static final AbstractList<Sign> SIGNS = ClientEvents.SIGNS;
+    public static final AbstractList<ClientSign> SIGNS = ClientEvents.SIGNS;
     public static final Utils.LimitList<MutableComponent> CHATS = ClientEvents.CHATS;
     public static void PostSign(){
         HitResult hitResult = Utils.IPick(1.0F);
@@ -34,9 +35,8 @@ public class Actions {
         }else if(hitResult instanceof EntityHitResult entityHitResult){
             message = entityHitResult.getEntity().getUUID().toString();
         }
-
         if(message.equals("")) return;
-        String s1 = SharedConstants.filterText("/mark " + message);
+        String s1 = SharedConstants.filterText("/ssi mark DEFAULT " + message);
         SendCommand(s1);
 
     }
@@ -62,7 +62,7 @@ public class Actions {
         HitResult hitResult = Utils.IPick(1.0F);
         if(hitResult instanceof EntityHitResult entityHitResult){
            String uuid = entityHitResult.getEntity().getUUID().toString();
-            String s1 = SharedConstants.filterText("/mark " + uuid + " " + part);
+            String s1 = SharedConstants.filterText("/ssi mark " + uuid + " " + part);
             SendCommand(s1);
         }
     }

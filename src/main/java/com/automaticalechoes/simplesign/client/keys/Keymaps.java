@@ -21,7 +21,6 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class Keymaps {
     public static final HashMap<KeyMapping,Runnable> KEYMAPS = new HashMap<>();
-
     public static KeyMapping Register(KeyMapping keyMapping,Runnable runnable){
         KEYMAPS.put(keyMapping,runnable);
         return keyMapping;

@@ -1,5 +1,6 @@
 package com.automaticalechoes.simplesign.client.command;
 
+import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientConfig;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -13,7 +14,7 @@ import net.minecraft.commands.Commands;
 
 public class ClientSettingCommand {
     public static final LiteralArgumentBuilder<CommandSourceStack> SSI_SETTING =
-            Commands.literal("ssi").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
+            Commands.literal("setting").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
     public static final LiteralArgumentBuilder<CommandSourceStack> ENTITY_GLOW = Commands.literal("shouldEntityGlow");
     public static final RequiredArgumentBuilder<CommandSourceStack, Boolean> SHOULD_ENTITY_GLOW =
             Commands.argument("entity_glow", BoolArgumentType.bool());
@@ -23,7 +24,7 @@ public class ClientSettingCommand {
             Commands.argument("detail", BoolArgumentType.bool());
 
     public static void register(CommandDispatcher<CommandSourceStack> p_249870_) {
-        p_249870_.register(SSI_SETTING
+        p_249870_.register(SimpleSign.SSI.then(SSI_SETTING
                 .then(ENTITY_GLOW
                         .then(SHOULD_ENTITY_GLOW.executes(context -> {
                             ClientConfig.SHOULD_ENTITY_GLOW.set(BoolArgumentType.getBool(context,"entity_glow"));
@@ -35,7 +36,7 @@ public class ClientSettingCommand {
                             ClientConfig.SHOULD_SHOW_DETAIL.set(BoolArgumentType.getBool(context, "detail"));
                             return 1;
                         }))
-                )
+                ))
         );
 
     }
