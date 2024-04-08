@@ -11,6 +11,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -54,7 +55,11 @@ public class MarkCommand {
    public static final MutableComponent AT = Component.translatable("sign.at");
    public static final MutableComponent _S = Component.translatable("sign._s");
    public static final MutableComponent NONE = Component.translatable("sign.none");
-
+    public static final MutableComponent FAR_AWAY = Component.translatable("sign.marked_care_pos");
+    public static final MutableComponent CARE_NAME = Component.translatable("sign.marked_care_name");
+    public static final MutableComponent FOCUS_POS = Component.translatable("sign.marked_focus_pos");
+    public static final MutableComponent FOCUS_NAME = Component.translatable("sign.marked_focus_name");
+    public static final MutableComponent QUEST_POS = Component.translatable("sign.marked_quest");
    public static final Style STYLE_ITEM = Style.EMPTY.applyFormats(ChatFormatting.BLUE);
    public static final Style STYLE_BLOCK = Style.EMPTY.applyFormats(ChatFormatting.GREEN);
    public static final Style STYLE_ENTITY = Style.EMPTY.applyFormats(ChatFormatting.LIGHT_PURPLE);
@@ -107,17 +112,10 @@ public class MarkCommand {
            return 0;
        }
 
-
        Sign finalMark = mark;
        HoverEvent finalHoverEvent = hoverEvent;
-       MutableComponent mutableComponent = Component.empty()
-//               .append(senderName.copy()
-//                       .withStyle(ChatFormatting.GREEN))
-               .append(MARKED)
-               .append(markName)
-               .append(AT)
-               .append(posMessage)
-               .withStyle(style -> style
+
+       MutableComponent mutableComponent = DecorateMessage(finalMark.getType(), markName, posMessage).withStyle(style -> style
                        .withColor(ChatFormatting.GRAY)
                        .withHoverEvent(finalHoverEvent)
                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi getmark " + Sign.ToTag(finalMark))));
@@ -164,6 +162,22 @@ public class MarkCommand {
             return false;
         }, serverPlayer, bound);
         ((Iplayers)serverPlayer).trigger();
+    }
+
+    public static MutableComponent DecorateMessage(Sign.Type type, @Nullable Component markName, @Nullable Component pos){
+        MutableComponent mutableComponent = Component.empty();
+        switch (type){
+            case DEFAULT -> mutableComponent.append(MARKED);
+            case CARE -> mutableComponent.append(CARE_NAME);
+            case FOCUS -> mutableComponent.append(FOCUS_NAME);
+            case QUESTION -> mutableComponent.append(QUEST_POS);
+        }
+//
+        mutableComponent.append(markName);
+        if(pos != null){
+            mutableComponent.append(AT).append(pos);
+        }
+        return mutableComponent;
     }
 
     @Nullable
