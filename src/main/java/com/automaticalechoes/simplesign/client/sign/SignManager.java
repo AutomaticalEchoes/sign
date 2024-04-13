@@ -3,7 +3,6 @@ package com.automaticalechoes.simplesign.client.sign;
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.Utils;
 import com.automaticalechoes.simplesign.client.render.SignalRender;
-import com.automaticalechoes.simplesign.common.sign.Sign;
 import com.automaticalechoes.simplesign.mixin.IFrustum;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -31,7 +30,7 @@ import java.awt.*;
 import java.text.DecimalFormat;
 
 @OnlyIn(Dist.CLIENT)
-public class SignManager extends Utils.LimitList<ClientSign> {
+public class SignManager extends Utils.LimitList<ClientSignal> {
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##0.00");
     public static final ResourceLocation VIEW_FACE = new ResourceLocation(SimpleSign.MODID,"textures/view_face.png");
     public SignManager(int size){
@@ -47,7 +46,7 @@ public class SignManager extends Utils.LimitList<ClientSign> {
         Vec3 upVec3 = new Vec3(mainCamera.getUpVector());
         Vec3 leftVec3 = new Vec3(mainCamera.getLeftVector());
         Vec3 viewVec3 = new Vec3(mainCamera.getLookVector());
-        for (ClientSign sign : this) {
+        for (ClientSignal sign : this) {
             if (!sign.CanUse()) {
                 remove(sign);
                 continue;
@@ -108,7 +107,7 @@ public class SignManager extends Utils.LimitList<ClientSign> {
         Matrix4f matrix4f = ifrustum.getMatrix();
 //        float Ytan = 1.0f / matrix4f.m00();
         Vec3 viewVec = new Vec3(mainCamera.getLookVector());
-        for (ClientSign sign : this) {
+        for (ClientSignal sign : this) {
             if (!sign.CanUse()) {
                 remove(sign);
                 continue;

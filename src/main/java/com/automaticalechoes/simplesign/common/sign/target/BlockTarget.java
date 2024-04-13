@@ -1,45 +1,37 @@
-package com.automaticalechoes.simplesign.common.sign;
+package com.automaticalechoes.simplesign.common.sign.target;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 
-public class BlockSign implements Sign {
+public class BlockTarget implements SignalTarget {
     public static final String BLOCK_POS = "block_pos";
     public static final String BLOCK_TYPE = "block_type";
 
     private final BlockPos blockPos;
     private final ResourceLocation blockType;
 
-    protected final Type renderType;
-
-    public BlockSign(BlockPos blockPos , ResourceLocation resourceLocation){
-        this(blockPos, resourceLocation, null);
-    }
-
-    public BlockSign(BlockPos blockPos, ResourceLocation resourceLocation, @Nullable Type renderType){
+    public BlockTarget(BlockPos blockPos, ResourceLocation resourceLocation){
         this.blockPos = blockPos;
         this.blockType = resourceLocation;
-        this.renderType = renderType == null ? Type.DEFAULT : renderType;
     }
 
-    public BlockSign(CompoundTag compoundTag){
+    public BlockTarget(CompoundTag compoundTag){
         long aLong = compoundTag.getLong(BLOCK_POS);
         this.blockPos = BlockPos.of(aLong);
         this.blockType = ResourceLocation.tryParse(compoundTag.getString(BLOCK_TYPE));
-        this.renderType = Type.fromTag(compoundTag);
     }
 
     public CompoundTag CreateTag(){
         CompoundTag compoundTag = new CompoundTag();
+        compoundTag.putString(TARGET_TYPE, BLOCK);
         compoundTag.putLong(BLOCK_POS,blockPos.asLong());
         compoundTag.putString(BLOCK_TYPE,blockType.toString());
         return compoundTag;
@@ -65,27 +57,18 @@ public class BlockSign implements Sign {
         return blockPos.getCenter();
     }
 
-    @Override
-    public TargetType getTargetType() {
-        return BLOCK;
-    }
-
-    @Override
-    public Type getType() {
-        return this.renderType;
-    }
 
     @Override
     public boolean equals(Object obj) {
         if(obj.getClass() != this.getClass()) return false;
-        BlockSign obj1 = (BlockSign) obj;
+        BlockTarget obj1 = (BlockTarget) obj;
         return obj1.blockPos.equals(this.blockPos) && obj1.blockType.equals(this.blockType);
     }
 
     @Override
     @Nullable
     public ItemStack getItemStack(){
-        Block block = ForgeRegistries.BLOCKS.getValue(this.blockType);
+        net.minecraft.world.level.block.Block block = ForgeRegistries.BLOCKS.getValue(this.blockType);
         return block != null ? block.asItem().getDefaultInstance() : null;
     }
 }

@@ -1,4 +1,4 @@
-package com.automaticalechoes.simplesign.common.sign;
+package com.automaticalechoes.simplesign.common.sign.target;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -13,32 +13,25 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.UUID;
 
-public class EntitySign implements Sign {
+public class EntityTarget implements SignalTarget {
     public static final String UUID = "uuid";
     public static final String BLOCK_POS = "block_pos";
     @Nullable
     protected Entity entity;
+    String ITEM = "show_item";
     protected final BlockPos pos;
-    protected final Type renderType;
     protected final UUID uuid;
     protected final ItemStack itemStack;
-
-    public EntitySign(UUID uuid, BlockPos pos, @Nullable ItemStack itemStack){
-       this(uuid, pos, null, itemStack);
-    }
-
-    public EntitySign(UUID uuid, BlockPos pos, @Nullable Type renderType, @Nullable ItemStack itemStack){
+    public EntityTarget(UUID uuid, BlockPos pos, @Nullable ItemStack itemStack){
         this.uuid = uuid;
         this.pos = pos;
         this.itemStack = itemStack;
-        this.renderType = renderType == null? Type.DEFAULT : renderType;
     }
 
-    public EntitySign(CompoundTag compoundTag){
+    public EntityTarget(CompoundTag compoundTag){
         this.uuid = compoundTag.getUUID(UUID);
         this.pos = BlockPos.of(compoundTag.getLong(BLOCK_POS));
         this.itemStack = compoundTag.contains(ITEM)? ItemStack.of(compoundTag.getCompound(ITEM)) : null;
-        this.renderType = Type.fromTag(compoundTag);
     }
 
     @Override
@@ -46,12 +39,7 @@ public class EntitySign implements Sign {
         return new Color(uuid.hashCode());
     }
 
-    @Override
-    public TargetType getTargetType() {
-        return ENTITY;
-    }
 
-    @Override
     public Vec3 getPointPos() {
         return entity != null ? entity.getEyePosition() : pos.getCenter();
     }
@@ -61,6 +49,7 @@ public class EntitySign implements Sign {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putUUID(UUID,this.uuid);
         compoundTag.putLong(BLOCK_POS,this.pos.asLong());
+        compoundTag.putString(TARGET_TYPE, ENTITY);
         if(itemStack !=null){
             compoundTag.put(ITEM,itemStack.save(new CompoundTag()));
         }
@@ -69,17 +58,12 @@ public class EntitySign implements Sign {
 
     @Override
     public boolean equals(Object obj) {
-        if(this.entity != null && obj instanceof Entity entity){
+        if(this.entity != null && obj instanceof net.minecraft.world.entity.Entity entity){
             return this.entity == entity;
         }
         if(obj.getClass() != this.getClass()) return false;
-        EntitySign obj1 = (EntitySign) obj;
+        EntityTarget obj1 = (EntityTarget) obj;
         return obj1.pos.equals(this.pos) && obj1.uuid.equals(this.uuid);
-    }
-
-    @Override
-    public Type getType() {
-        return this.renderType;
     }
 
     @Override
@@ -87,7 +71,7 @@ public class EntitySign implements Sign {
         if(Minecraft.getInstance().player.position().subtract(this.pos.getCenter()).length() < 32.0D
                 &&( this.entity == null || (this.entity.isRemoved()))){
             this.entity = null;
-            for (Entity next : Minecraft.getInstance().level.entitiesForRendering()) {
+            for (net.minecraft.world.entity.Entity next : Minecraft.getInstance().level.entitiesForRendering()) {
                 if (next.getUUID().equals(this.uuid)) {
                     this.entity = next;
                     break;
@@ -96,11 +80,11 @@ public class EntitySign implements Sign {
 
             return this.entity != null;
         }
-        return entity == null || entity.isAlive() || entity.getRemovalReason() == Entity.RemovalReason.DISCARDED;
+        return entity == null || entity.isAlive() || entity.getRemovalReason() == net.minecraft.world.entity.Entity.RemovalReason.DISCARDED;
     }
 
     @Nullable
-    public Entity getEntity() {
+    public net.minecraft.world.entity.Entity getEntity() {
         return entity;
     }
 

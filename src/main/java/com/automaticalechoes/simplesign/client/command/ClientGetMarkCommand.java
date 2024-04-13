@@ -2,15 +2,16 @@ package com.automaticalechoes.simplesign.client.command;
 
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
-import com.automaticalechoes.simplesign.client.sign.ClientSign;
-import com.automaticalechoes.simplesign.common.sign.EntitySign;
-import com.automaticalechoes.simplesign.common.sign.Sign;
+import com.automaticalechoes.simplesign.client.sign.ClientSignal;
+import com.automaticalechoes.simplesign.common.sign.target.EntityTarget;
+import com.automaticalechoes.simplesign.common.sign.Signal;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.NbtTagArgument;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,16 +31,17 @@ public class ClientGetMarkCommand {
     }
 
     public static int GetMark(CommandSourceStack sourceStack,Tag nbt){
-        Sign mark = Sign.FromTag(nbt);
-        if(mark != null){
-            if(CheckMark(sourceStack,mark)) ClientEvents.SIGNS.add(new ClientSign(mark));
-        } else{
+        if(!(nbt instanceof CompoundTag compoundTag)){
             sourceStack.sendFailure(Component.translatable("sign.unvalid_mark"));
+            return 0;
         }
+        ClientSignal clientSignal = new ClientSignal(compoundTag);
+        if(CheckMark(sourceStack, clientSignal)) ClientEvents.SIGNS.add(clientSignal);
+
         return 1;
     }
 
-    public static boolean CheckMark(CommandSourceStack sourceStack, Sign mark){
+    public static boolean CheckMark(CommandSourceStack sourceStack, ClientSignal mark){
         if(!mark.CanUse()){
             sourceStack.sendFailure(Component.translatable("sign.source_discord"));
             return false;
@@ -48,7 +50,7 @@ public class ClientGetMarkCommand {
             sourceStack.sendFailure(Component.translatable("sign.exist"));
             return false;
         }
-        if(mark instanceof EntitySign entitySign && entitySign.isLocalPlayer()){
+        if(mark.getTarget() instanceof EntityTarget entitySign && entitySign.isLocalPlayer()){
             sourceStack.sendFailure(Component.translatable("sign.self"));
             return false;
         }

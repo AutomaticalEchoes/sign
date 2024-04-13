@@ -3,15 +3,12 @@ package com.automaticalechoes.simplesign.client.keys;
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
 import com.automaticalechoes.simplesign.client.Utils;
-import com.automaticalechoes.simplesign.client.sign.ClientSign;
-import com.automaticalechoes.simplesign.common.sign.EntitySign;
-import com.automaticalechoes.simplesign.common.sign.Sign;
+import com.automaticalechoes.simplesign.client.sign.ClientSignal;
+import com.automaticalechoes.simplesign.common.sign.Signal;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -20,13 +17,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientCommandHandler;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
 
 @OnlyIn(Dist.CLIENT)
 public class Actions {
-    public static final AbstractList<ClientSign> SIGNS = ClientEvents.SIGNS;
+    public static final AbstractList<ClientSignal> SIGNS = ClientEvents.SIGNS;
     public static final Utils.LimitList<MutableComponent> CHATS = ClientEvents.CHATS;
-    public static void PostSign(Sign.Type type){
+    public static void PostSign(Signal.Type type){
         HitResult hitResult = Utils.IPick(1.0F);
         String message = "";
         if(hitResult instanceof BlockHitResult blockHitResult && blockHitResult.getType() != HitResult.Type.MISS){
