@@ -1,8 +1,6 @@
 package com.automaticalechoes.simplesign.common.sign.target;
 
-import com.automaticalechoes.simplesign.common.sign.Signal;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;

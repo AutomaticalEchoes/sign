@@ -4,7 +4,6 @@ import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
 import com.automaticalechoes.simplesign.client.sign.ClientSignal;
 import com.automaticalechoes.simplesign.common.sign.target.EntityTarget;
-import com.automaticalechoes.simplesign.common.sign.Signal;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -36,7 +35,7 @@ public class ClientGetMarkCommand {
             return 0;
         }
         ClientSignal clientSignal = new ClientSignal(compoundTag);
-        if(CheckMark(sourceStack, clientSignal)) ClientEvents.SIGNS.add(clientSignal);
+        if(CheckMark(sourceStack, clientSignal)) ClientEvents.SIGNALS.add(clientSignal);
 
         return 1;
     }
@@ -46,7 +45,7 @@ public class ClientGetMarkCommand {
             sourceStack.sendFailure(Component.translatable("sign.source_discord"));
             return false;
         }
-        if(ClientEvents.SIGNS.contains(mark)){
+        if(ClientEvents.SIGNALS.contains(mark)){
             sourceStack.sendFailure(Component.translatable("sign.exist"));
             return false;
         }

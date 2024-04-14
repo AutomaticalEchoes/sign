@@ -3,8 +3,7 @@ package com.automaticalechoes.simplesign.client.keys;
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
 import com.automaticalechoes.simplesign.client.Utils;
-import com.automaticalechoes.simplesign.client.sign.ClientSignal;
-import com.automaticalechoes.simplesign.common.sign.Signal;
+import com.automaticalechoes.simplesign.common.sign.Sign;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -16,13 +15,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ClientCommandHandler;
 
-import java.util.AbstractList;
-
 @OnlyIn(Dist.CLIENT)
 public class Actions {
-    public static final AbstractList<ClientSignal> SIGNS = ClientEvents.SIGNS;
-    public static final Utils.LimitList<MutableComponent> CHATS = ClientEvents.CHATS;
-    public static void PostSign(Signal.Type type){
+    public static void PostSign(Sign.Type type){
         HitResult hitResult = Utils.IPick(1.0F);
         String message = "";
         if(hitResult instanceof BlockHitResult blockHitResult && blockHitResult.getType() != HitResult.Type.MISS){
@@ -32,26 +27,24 @@ public class Actions {
             message = entityHitResult.getEntity().getUUID().toString();
         }
         if(message.equals("")) return;
-        String s1 = SharedConstants.filterText("/ssi mark " + type.name() + message);
+        String s1 = SharedConstants.filterText("/ssi mark " + type.name() + " " + message);
         SendCommand(s1);
 
     }
 
-    public static void GetSign(){
-        if(CHATS.isEmpty())return;
-        MutableComponent component = CHATS.getLast();
+    public static void GetSign(MutableComponent component){
         String value = component.getStyle().getClickEvent().getValue();
         ClientCommandHandler.runCommand(value.substring(1));
     }
-    
-    public static void RemoveSign(){
-        if(SIGNS.size() > 0){
-            SIGNS.remove(SIGNS.size() - 1);
+
+    public static void RemoveMark(){
+        if(ClientEvents.MARK_RENDER.size() > 0){
+            ClientEvents.MARK_RENDER.remove(ClientEvents.MARK_RENDER.size() - 1);
         }
     }
-    
-    public static void ClearSign(){
-        SIGNS.clear();
+
+    public static void ClearMark(){
+        ClientEvents.MARK_RENDER.clear();
     }
 
     public static void Ping(String part){

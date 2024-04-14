@@ -30,13 +30,14 @@ import java.awt.*;
 import java.text.DecimalFormat;
 
 @OnlyIn(Dist.CLIENT)
-public class SignManager extends Utils.LimitList<ClientSignal> {
+public class SignalRenderQue extends Utils.LimitList<ClientSignal> {
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##0.00");
     public static final ResourceLocation VIEW_FACE = new ResourceLocation(SimpleSign.MODID,"textures/view_face.png");
-    public SignManager(int size){
+    public SignalRenderQue(int size){
         super(size);
     }
 
+    @Deprecated
     public void render3D(RenderLevelStageEvent event){
         if(this.isEmpty()) return;
         PoseStack poseStack = event.getPoseStack();

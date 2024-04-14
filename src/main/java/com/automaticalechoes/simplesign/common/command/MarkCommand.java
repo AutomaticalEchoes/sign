@@ -2,10 +2,10 @@ package com.automaticalechoes.simplesign.common.command;
 
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.common.Iplayers;
-import com.automaticalechoes.simplesign.common.sign.ServerSignal;
+import com.automaticalechoes.simplesign.common.sign.Signal;
 import com.automaticalechoes.simplesign.common.sign.target.BlockTarget;
 import com.automaticalechoes.simplesign.common.sign.target.EntityTarget;
-import com.automaticalechoes.simplesign.common.sign.Signal;
+import com.automaticalechoes.simplesign.common.sign.Sign;
 import com.automaticalechoes.simplesign.mixin.PlayerListMixin;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -40,8 +40,8 @@ import javax.annotation.Nullable;
 public class MarkCommand {
     public static final LiteralArgumentBuilder<CommandSourceStack> MARK =
             Commands.literal("mark").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
-    public static final RequiredArgumentBuilder<CommandSourceStack, Signal.Type> SIGN =
-            Commands.argument("sign_type", EnumArgument.enumArgument(Signal.Type.class));
+    public static final RequiredArgumentBuilder<CommandSourceStack, Sign.Type> SIGN =
+            Commands.argument("sign_type", EnumArgument.enumArgument(Sign.Type.class));
     public static final RequiredArgumentBuilder<CommandSourceStack, Coordinates> BLOCKPOS =
             Commands.argument("blockPos", BlockPosArgument.blockPos());
     public static final RequiredArgumentBuilder<CommandSourceStack, EntitySelector> ENTITY =
@@ -67,12 +67,12 @@ public class MarkCommand {
        p_249870_.register(SimpleSign.SSI
                .then(MARK
                        .then(SIGN
-                               .then(ENTITY.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Signal.Type.class),null ,EntityArgument.getEntity(context,"entity")))
+                               .then(ENTITY.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Sign.Type.class),null ,EntityArgument.getEntity(context,"entity")))
                                        .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
-                               .then(BLOCKPOS.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Signal.Type.class), BlockPosArgument.getBlockPos(context,"blockPos"),null))))));
+                               .then(BLOCKPOS.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Sign.Type.class), BlockPosArgument.getBlockPos(context,"blockPos"),null))))));
    }
 
-   public static int Mark(CommandSourceStack sourceStack, @Nullable Signal.Type renderType, @Nullable BlockPos pos, @Nullable net.minecraft.world.entity.Entity entity) throws CommandSyntaxException {
+   public static int Mark(CommandSourceStack sourceStack, @Nullable Sign.Type renderType, @Nullable BlockPos pos, @Nullable net.minecraft.world.entity.Entity entity) throws CommandSyntaxException {
        if(sourceStack instanceof ClientCommandSourceStack) throw new CommandSyntaxException(CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand(), Component.literal("can not run in client")) ;
 //       Component senderName = sourceStack.getPlayer().getName();
        HoverEvent hoverEvent = null;
@@ -85,14 +85,14 @@ public class MarkCommand {
            return 0;
        }
 
-       Signal mark = null;
+       Sign mark = null;
        ItemStack itemStack = null;
        if(pos != null){
            net.minecraft.world.level.block.Block block = sourceStack.getLevel().getBlockState(pos).getBlock();
            markName.append(block.getName()).withStyle(STYLE_BLOCK);
            posMessage.append(Component.translatable(" [" + pos.toShortString() + "]"));
            ResourceLocation key = ForgeRegistries.BLOCKS.getKey(block);
-           mark = new ServerSignal(new BlockTarget(pos, key), renderType);
+           mark = new Signal(new BlockTarget(pos, key), renderType);
        }else if(entity != null){
            if(entity instanceof ItemEntity || (entity instanceof ItemFrame itemFrame && !itemFrame.getItem().isEmpty())){
                itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
@@ -104,7 +104,7 @@ public class MarkCommand {
                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ENTITY,new HoverEvent.EntityTooltipInfo(entity.getType(),entity.getUUID(),entity.getDisplayName()));
            }
            posMessage.append(Component.translatable(" [" + entity.blockPosition().toShortString() + "]"));
-           mark = new ServerSignal(new EntityTarget(entity.getUUID(), entity.blockPosition(),itemStack), renderType);
+           mark = new Signal(new EntityTarget(entity.getUUID(), entity.blockPosition(),itemStack), renderType);
        }
 
        if(mark == null){
@@ -112,7 +112,7 @@ public class MarkCommand {
            return 0;
        }
 
-       Signal finalMark = mark;
+       Sign finalMark = mark;
        HoverEvent finalHoverEvent = hoverEvent;
 
        MutableComponent mutableComponent = DecorateMessage(finalMark.getType(), markName, posMessage).withStyle(style -> style
@@ -164,7 +164,7 @@ public class MarkCommand {
         ((Iplayers)serverPlayer).trigger();
     }
 
-    public static MutableComponent DecorateMessage(Signal.Type type, @Nullable Component markName, @Nullable Component pos){
+    public static MutableComponent DecorateMessage(Sign.Type type, @Nullable Component markName, @Nullable Component pos){
         MutableComponent mutableComponent = Component.empty();
         switch (type){
             case DEFAULT -> mutableComponent.append(MARKED);

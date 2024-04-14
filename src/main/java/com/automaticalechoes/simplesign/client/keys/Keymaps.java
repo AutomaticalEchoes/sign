@@ -1,7 +1,7 @@
 package com.automaticalechoes.simplesign.client.keys;
 
 import com.automaticalechoes.simplesign.client.ClientConfig;
-import com.automaticalechoes.simplesign.common.sign.Signal;
+import com.automaticalechoes.simplesign.common.sign.Sign;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -37,39 +37,39 @@ public class Keymaps {
             Register(new KeyMapping("sign.post_sign_default",
                     KeyConflictContext.IN_GAME,
                     KeyModifier.CONTROL,
-                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Signal.Type.DEFAULT));
+                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Sign.Type.DEFAULT));
         }
         if(ClientConfig.SHOULD_REGISTER_KEYMAPPING_MARK_CARE.get()){
             Register(new KeyMapping("sign.post_sign_care",
                     KeyConflictContext.IN_GAME,
                     KeyModifier.CONTROL,
-                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Signal.Type.CARE));
+                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Sign.Type.CARE));
         }
         if(ClientConfig.SHOULD_REGISTER_KEYMAPPING_MARK_FOCUS.get()){
             Register(new KeyMapping("sign.post_sign_focus",
                     KeyConflictContext.IN_GAME,
                     KeyModifier.CONTROL,
-                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Signal.Type.FOCUS));
+                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Sign.Type.FOCUS));
         }
         if(ClientConfig.SHOULD_REGISTER_KEYMAPPING_MARK_QUEST.get()){
             Register(new KeyMapping("sign.post_sign_quest",
                     KeyConflictContext.IN_GAME,
                     KeyModifier.CONTROL,
-                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Signal.Type.QUESTION));
+                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V,"sign.category"), () -> Actions.PostSign(Sign.Type.QUESTION));
         }
 
-        if(ClientConfig.SHOULD_REGISTER_KEYMAPPING_GET_MARK.get()){
-            Register(new KeyMapping("sign.get_sign",
-                    KeyConflictContext.IN_GAME,
-                    KeyModifier.CONTROL,
-                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G,"sign.category"),Actions::GetSign);
-        }
+//        if(ClientConfig.SHOULD_REGISTER_KEYMAPPING_GET_MARK.get()){
+//            Register(new KeyMapping("sign.get_sign",
+//                    KeyConflictContext.IN_GAME,
+//                    KeyModifier.CONTROL,
+//                    InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G,"sign.category"),Actions::GetSign);
+//        }
 
         if(ClientConfig.SHOULD_REGISTER_KEYMAPPING_REMOVE_MARK.get()){
             Register(new KeyMapping("sign.remove_sign",
                     KeyConflictContext.IN_GAME,
                     KeyModifier.CONTROL,
-                    InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_R,"sign.category"),Actions::RemoveSign);
+                    InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_R,"sign.category"),Actions::RemoveMark);
         }
 
 
@@ -77,7 +77,7 @@ public class Keymaps {
             Register(new KeyMapping("sign.clear_sign",
                     KeyConflictContext.IN_GAME,
                     KeyModifier.CONTROL,
-                    InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_C,"sign.category"),Actions::ClearSign);
+                    InputConstants.Type.KEYSYM,GLFW.GLFW_KEY_C,"sign.category"),Actions::ClearMark);
         }
 
         if(ClientConfig.SHOULD_REGISTER_KEYMAPPING_SIGN_SLOT.get()){
