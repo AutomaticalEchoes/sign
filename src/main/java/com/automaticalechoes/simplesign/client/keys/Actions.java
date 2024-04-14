@@ -4,6 +4,7 @@ import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
 import com.automaticalechoes.simplesign.client.Utils;
 import com.automaticalechoes.simplesign.common.sign.Sign;
+import com.automaticalechoes.simplesign.common.sign.Signal;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -17,7 +18,7 @@ import net.minecraftforge.client.ClientCommandHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class Actions {
-    public static void PostSign(Sign.Type type){
+    public static void PostSign(Signal.Type type){
         HitResult hitResult = Utils.IPick(1.0F);
         String message = "";
         if(hitResult instanceof BlockHitResult blockHitResult && blockHitResult.getType() != HitResult.Type.MISS){
@@ -32,7 +33,7 @@ public class Actions {
 
     }
 
-    public static void GetSign(MutableComponent component){
+    public static void GetSignWhenReceived(MutableComponent component){
         String value = component.getStyle().getClickEvent().getValue();
         ClientCommandHandler.runCommand(value.substring(1));
     }

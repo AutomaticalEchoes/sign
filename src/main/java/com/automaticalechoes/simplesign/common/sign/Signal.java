@@ -3,13 +3,18 @@ package com.automaticalechoes.simplesign.common.sign;
 import com.automaticalechoes.simplesign.common.sign.target.SignalTarget;
 import net.minecraft.nbt.CompoundTag;
 
-public record Signal(SignalTarget target, Type type) implements Sign {
-    @Override
-    public SignalTarget getTarget() {
-        return target;
+public class Signal extends SignImp {
+    private final Type type;
+    public Signal(SignalTarget target,Type type) {
+        super(target);
+        this.type = type;
     }
 
-//    @Override
+    public Type getType() {
+        return type;
+    }
+
+    //    @Override
 //    public Vec3 getPointPos() {
 //        return null;
 //    }
@@ -21,7 +26,7 @@ public record Signal(SignalTarget target, Type type) implements Sign {
         return compoundTag;
     }
 
-    enum Type {
+    public enum Type {
         DEFAULT(0),
         FOCUS(1),
         CARE(2),

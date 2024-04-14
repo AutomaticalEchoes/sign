@@ -3,7 +3,12 @@ package com.automaticalechoes.simplesign.common.sign;
 import com.automaticalechoes.simplesign.common.sign.target.SignalTarget;
 import net.minecraft.nbt.CompoundTag;
 
-public record Mark(SignalTarget target) implements Sign{
+public class SignImp implements Sign{
+    protected final SignalTarget target;
+    public SignImp(SignalTarget target){
+        this.target = target;
+    }
+
     @Override
     public SignalTarget getTarget() {
         return target;

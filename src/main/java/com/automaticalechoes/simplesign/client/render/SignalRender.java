@@ -3,6 +3,7 @@ package com.automaticalechoes.simplesign.client.render;
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.Utils;
 import com.automaticalechoes.simplesign.common.sign.Sign;
+import com.automaticalechoes.simplesign.common.sign.Signal;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -55,7 +56,7 @@ public class SignalRender {
         minecraft.font.drawInBatch(distanceMessage, - width / 2F , 10,-1,false,poseStack.last().pose(),minecraft.renderBuffers().bufferSource(), Font.DisplayMode.SEE_THROUGH,0,15728880);
     }
 
-    public static void RenderPointTexture(PoseStack p_114083_, Sign.Type renderType, MultiBufferSource p_114084_, int p_114085_, Color color) {
+    public static void RenderPointTexture(PoseStack p_114083_, Signal.Type renderType, MultiBufferSource p_114084_, int p_114085_, Color color) {
         p_114083_.pushPose();
         p_114083_.mulPose(Axis.ZP.rotationDegrees(45.0F));
         PoseStack.Pose posestack$pose = p_114083_.last();
@@ -94,7 +95,7 @@ public class SignalRender {
     }
 
 
-    public static ResourceLocation resourceLocation(Sign.Type renderType) {
+    public static ResourceLocation resourceLocation(Signal.Type renderType) {
         return switch (renderType){
             case DEFAULT -> RESOURCE_DEFAULT;
             case FOCUS -> RESOURCE_FOCUS;

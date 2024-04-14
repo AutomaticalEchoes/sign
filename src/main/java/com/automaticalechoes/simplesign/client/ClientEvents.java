@@ -46,7 +46,7 @@ public class ClientEvents {
         if( event.getPlayerChatMessage().unsignedContent() instanceof MutableComponent mutableComponent
                 && mutableComponent.getStyle().getClickEvent() != null
                 && mutableComponent.getStyle().getClickEvent().getValue().startsWith("/ssi getmark")){
-            Actions.GetSign(mutableComponent);
+            Actions.GetSignWhenReceived(mutableComponent);
         }
     }
 

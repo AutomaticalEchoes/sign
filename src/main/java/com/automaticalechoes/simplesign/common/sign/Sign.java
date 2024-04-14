@@ -17,8 +17,4 @@ public interface Sign {
 //     Vec3 getPointPos();
      CompoundTag CreateTag();
 
-     static CompoundTag toTag(Sign sign){
-
-     }
-
 }

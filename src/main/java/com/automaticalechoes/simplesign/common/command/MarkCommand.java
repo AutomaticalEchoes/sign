@@ -2,6 +2,7 @@ package com.automaticalechoes.simplesign.common.command;
 
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.common.Iplayers;
+import com.automaticalechoes.simplesign.common.sign.SignImp;
 import com.automaticalechoes.simplesign.common.sign.Signal;
 import com.automaticalechoes.simplesign.common.sign.target.BlockTarget;
 import com.automaticalechoes.simplesign.common.sign.target.EntityTarget;
@@ -40,8 +41,8 @@ import javax.annotation.Nullable;
 public class MarkCommand {
     public static final LiteralArgumentBuilder<CommandSourceStack> MARK =
             Commands.literal("mark").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
-    public static final RequiredArgumentBuilder<CommandSourceStack, Sign.Type> SIGN =
-            Commands.argument("sign_type", EnumArgument.enumArgument(Sign.Type.class));
+    public static final RequiredArgumentBuilder<CommandSourceStack, Signal.Type> SIGNAL =
+            Commands.argument("sign_type", EnumArgument.enumArgument(Signal.Type.class));
     public static final RequiredArgumentBuilder<CommandSourceStack, Coordinates> BLOCKPOS =
             Commands.argument("blockPos", BlockPosArgument.blockPos());
     public static final RequiredArgumentBuilder<CommandSourceStack, EntitySelector> ENTITY =
@@ -66,13 +67,16 @@ public class MarkCommand {
    public static void register(CommandDispatcher<CommandSourceStack> p_249870_) {
        p_249870_.register(SimpleSign.SSI
                .then(MARK
-                       .then(SIGN
-                               .then(ENTITY.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Sign.Type.class),null ,EntityArgument.getEntity(context,"entity")))
+                       .then(ENTITY.executes(context -> Mark(context.getSource(),null ,EntityArgument.getEntity(context,"entity")))
+                               .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
+                       .then(BLOCKPOS.executes(context -> Mark(context.getSource(), BlockPosArgument.getBlockPos(context,"blockPos"),null)))
+                       .then(SIGNAL
+                               .then(ENTITY.executes(context -> Signal(context.getSource(), context.getArgument("sign_type", Signal.Type.class),null ,EntityArgument.getEntity(context,"entity")))
                                        .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
-                               .then(BLOCKPOS.executes(context -> Mark(context.getSource(), context.getArgument("sign_type", Sign.Type.class), BlockPosArgument.getBlockPos(context,"blockPos"),null))))));
+                               .then(BLOCKPOS.executes(context -> Signal(context.getSource(), context.getArgument("sign_type", Signal.Type.class), BlockPosArgument.getBlockPos(context,"blockPos"),null))))));
    }
 
-   public static int Mark(CommandSourceStack sourceStack, @Nullable Sign.Type renderType, @Nullable BlockPos pos, @Nullable net.minecraft.world.entity.Entity entity) throws CommandSyntaxException {
+   public static int Mark(CommandSourceStack sourceStack, @Nullable BlockPos pos, @Nullable net.minecraft.world.entity.Entity entity) throws CommandSyntaxException {
        if(sourceStack instanceof ClientCommandSourceStack) throw new CommandSyntaxException(CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand(), Component.literal("can not run in client")) ;
 //       Component senderName = sourceStack.getPlayer().getName();
        HoverEvent hoverEvent = null;
@@ -92,7 +96,7 @@ public class MarkCommand {
            markName.append(block.getName()).withStyle(STYLE_BLOCK);
            posMessage.append(Component.translatable(" [" + pos.toShortString() + "]"));
            ResourceLocation key = ForgeRegistries.BLOCKS.getKey(block);
-           mark = new Signal(new BlockTarget(pos, key), renderType);
+           mark = new SignImp(new BlockTarget(pos, key));
        }else if(entity != null){
            if(entity instanceof ItemEntity || (entity instanceof ItemFrame itemFrame && !itemFrame.getItem().isEmpty())){
                itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
@@ -104,7 +108,7 @@ public class MarkCommand {
                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ENTITY,new HoverEvent.EntityTooltipInfo(entity.getType(),entity.getUUID(),entity.getDisplayName()));
            }
            posMessage.append(Component.translatable(" [" + entity.blockPosition().toShortString() + "]"));
-           mark = new Signal(new EntityTarget(entity.getUUID(), entity.blockPosition(),itemStack), renderType);
+           mark = new SignImp(new EntityTarget(entity.getUUID(), entity.blockPosition(),itemStack));
        }
 
        if(mark == null){
@@ -115,7 +119,7 @@ public class MarkCommand {
        Sign finalMark = mark;
        HoverEvent finalHoverEvent = hoverEvent;
 
-       MutableComponent mutableComponent = DecorateMessage(finalMark.getType(), markName, posMessage).withStyle(style -> style
+       MutableComponent mutableComponent = DecorateMessage(finalMark instanceof Signal signal? signal.getType() : null, markName, posMessage).withStyle(style -> style
                        .withColor(ChatFormatting.GRAY)
                        .withHoverEvent(finalHoverEvent)
                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi getmark " + finalMark.CreateTag())));
@@ -123,6 +127,58 @@ public class MarkCommand {
                .withUnsignedContent(mutableComponent), ChatType.bind(ChatType.CHAT,sourceStack));
        return 1;
    }
+
+    public static int Signal(CommandSourceStack sourceStack, @Nullable Signal.Type renderType, @Nullable BlockPos pos, @Nullable net.minecraft.world.entity.Entity entity) throws CommandSyntaxException {
+        if(sourceStack instanceof ClientCommandSourceStack) throw new CommandSyntaxException(CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand(), Component.literal("can not run in client")) ;
+//       Component senderName = sourceStack.getPlayer().getName();
+        HoverEvent hoverEvent = null;
+        MutableComponent markName = Component.empty();
+        MutableComponent posMessage = Component.empty().withStyle(STYLE_BLOCK_POS);
+        ServerPlayer player = sourceStack.getPlayer();
+
+        if(player == null || !((Iplayers)player).canUse()){
+            sourceStack.sendFailure(Component.translatable("sign.no_useful_time"));
+            return 0;
+        }
+
+        Sign mark = null;
+        ItemStack itemStack = null;
+        if(pos != null){
+            net.minecraft.world.level.block.Block block = sourceStack.getLevel().getBlockState(pos).getBlock();
+            markName.append(block.getName()).withStyle(STYLE_BLOCK);
+            posMessage.append(Component.translatable(" [" + pos.toShortString() + "]"));
+            ResourceLocation key = ForgeRegistries.BLOCKS.getKey(block);
+            mark = new Signal(new BlockTarget(pos, key), renderType);
+        }else if(entity != null){
+            if(entity instanceof ItemEntity || (entity instanceof ItemFrame itemFrame && !itemFrame.getItem().isEmpty())){
+                itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
+                markName.append(itemStack.getItem().getName(itemStack)).withStyle(STYLE_ITEM);
+                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(itemStack));
+            }else {
+                Component showName = entity instanceof Player ? entity.getName() : entity.getType().getDescription();
+                markName.append(showName).withStyle(STYLE_ENTITY);
+                hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_ENTITY,new HoverEvent.EntityTooltipInfo(entity.getType(),entity.getUUID(),entity.getDisplayName()));
+            }
+            posMessage.append(Component.translatable(" [" + entity.blockPosition().toShortString() + "]"));
+            mark = new Signal(new EntityTarget(entity.getUUID(), entity.blockPosition(),itemStack), renderType);
+        }
+
+        if(mark == null){
+            sourceStack.sendFailure(Component.translatable("sign.unvalid_mark"));
+            return 0;
+        }
+
+        Sign finalMark = mark;
+        HoverEvent finalHoverEvent = hoverEvent;
+
+        MutableComponent mutableComponent = DecorateMessage(finalMark instanceof Signal signal? signal.getType() : null, markName, posMessage).withStyle(style -> style
+                .withColor(ChatFormatting.GRAY)
+                .withHoverEvent(finalHoverEvent)
+                .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi getmark " + finalMark.CreateTag())));
+        SendMessage(player, sourceStack.getServer().getPlayerList(), PlayerChatMessage.unsigned(player.getUUID(),"")
+                .withUnsignedContent(mutableComponent), ChatType.bind(ChatType.CHAT,sourceStack));
+        return 1;
+    }
 
    public static int PingSlot(CommandSourceStack sourceStack, net.minecraft.world.entity.Entity entity, Integer slotNum){
        SlotAccess slot = entity.getSlot(slotNum);
@@ -164,13 +220,15 @@ public class MarkCommand {
         ((Iplayers)serverPlayer).trigger();
     }
 
-    public static MutableComponent DecorateMessage(Sign.Type type, @Nullable Component markName, @Nullable Component pos){
+    public static MutableComponent DecorateMessage(@Nullable Signal.Type type, @Nullable Component markName, @Nullable Component pos){
         MutableComponent mutableComponent = Component.empty();
-        switch (type){
-            case DEFAULT -> mutableComponent.append(MARKED);
-            case CARE -> mutableComponent.append(CARE_NAME);
-            case FOCUS -> mutableComponent.append(FOCUS_NAME);
-            case QUESTION -> mutableComponent.append(QUEST_POS);
+        if(type != null){
+            switch (type){
+                case DEFAULT -> mutableComponent.append(MARKED);
+                case CARE -> mutableComponent.append(CARE_NAME);
+                case FOCUS -> mutableComponent.append(FOCUS_NAME);
+                case QUESTION -> mutableComponent.append(QUEST_POS);
+            }
         }
 //
         mutableComponent.append(markName);
