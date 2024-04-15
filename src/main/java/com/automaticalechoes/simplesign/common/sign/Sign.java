@@ -12,9 +12,16 @@ import java.util.function.Function;
 
 public interface Sign {
      String RENDER_TYPE = "point_render_type";
-
      SignalTarget getTarget();
 //     Vec3 getPointPos();
      CompoundTag CreateTag();
+
+     static Sign fromTag(CompoundTag tag){
+          if(tag.contains(RENDER_TYPE)){
+               return new Signal(SignalTarget.FromTag(tag), Signal.Type.fromTag(tag));
+          }else {
+               return new SignImp(SignalTarget.FromTag(tag));
+          }
+     }
 
 }

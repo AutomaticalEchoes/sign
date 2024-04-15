@@ -2,7 +2,7 @@ package com.automaticalechoes.simplesign.client.command;
 
 import com.automaticalechoes.simplesign.SimpleSign;
 import com.automaticalechoes.simplesign.client.ClientEvents;
-import com.automaticalechoes.simplesign.client.sign.ClientSignal;
+import com.automaticalechoes.simplesign.client.sign.ClientSign;
 import com.automaticalechoes.simplesign.common.sign.target.EntityTarget;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -34,19 +34,21 @@ public class ClientGetMarkCommand {
             sourceStack.sendFailure(Component.translatable("sign.unvalid_mark"));
             return 0;
         }
-        ClientSignal clientSignal = new ClientSignal(compoundTag);
-        if(CheckMark(sourceStack, clientSignal)) ClientEvents.SIGNALS.add(clientSignal);
+        ClientSign clientSignal = new ClientSign(compoundTag);
+        if(CheckMark(sourceStack, clientSignal)){
+            if(clientSignal.getType() != null){
+                ClientEvents.SIGNALS_RENDER.add(clientSignal);
+            }else {
+                ClientEvents.MARK_RENDER.add(clientSignal);
+            }
+        }
 
         return 1;
     }
 
-    public static boolean CheckMark(CommandSourceStack sourceStack, ClientSignal mark){
+    public static boolean CheckMark(CommandSourceStack sourceStack, ClientSign mark){
         if(!mark.CanUse()){
             sourceStack.sendFailure(Component.translatable("sign.source_discord"));
-            return false;
-        }
-        if(ClientEvents.SIGNALS.contains(mark)){
-            sourceStack.sendFailure(Component.translatable("sign.exist"));
             return false;
         }
         if(mark.getTarget() instanceof EntityTarget entitySign && entitySign.isLocalPlayer()){

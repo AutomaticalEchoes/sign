@@ -4,9 +4,7 @@ import com.automaticalechoes.simplesign.client.command.ClientGetMarkCommand;
 import com.automaticalechoes.simplesign.client.command.ClientSettingCommand;
 import com.automaticalechoes.simplesign.client.keys.Actions;
 import com.automaticalechoes.simplesign.client.keys.Keymaps;
-import com.automaticalechoes.simplesign.client.sign.ClientSignal;
 import com.automaticalechoes.simplesign.client.sign.SignalRenderQue;
-import com.automaticalechoes.simplesign.client.render.SignalRender;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -14,17 +12,15 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.List;
-
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class ClientEvents {
-    public static final List<ClientSignal> SIGNALS =  new Utils.LimitList<>(15);
     public static final SignalRenderQue SIGNALS_RENDER = new SignalRenderQue(5);
     public static final SignalRenderQue MARK_RENDER = new SignalRenderQue(15);
     @SubscribeEvent
     public static void Render(RenderGuiOverlayEvent.Post event){
         if(event.getOverlay().overlay() == VanillaGuiOverlay.HOTBAR.type().overlay()){
             SIGNALS_RENDER.render2D(event);
+            MARK_RENDER.render2D(event);
 //            SIGNS.renderViewRot(event);
         }
     }

@@ -10,6 +10,11 @@ public class SignImp implements Sign{
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return target.equals(obj);
+    }
+
+    @Override
     public SignalTarget getTarget() {
         return target;
     }

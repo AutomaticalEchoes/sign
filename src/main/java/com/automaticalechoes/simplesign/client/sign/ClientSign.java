@@ -10,22 +10,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
-public class ClientSignal{
-    private final Signal signal;
+public class ClientSign {
+    private final Sign sign;
     private int lifecycle = 200;
 
-    public ClientSignal(CompoundTag tag){
-        this.signal = new Signal(SignalTarget.FromTag(tag), Signal.Type.fromTag(tag));
-        this.lifecycle = 200;
+    public ClientSign(CompoundTag tag){
+        this.sign = Sign.fromTag(tag);
+        this.lifecycle = sign instanceof Signal ? 200 : -1;
     }
 
 
     public SignalTarget getTarget() {
-        return signal.getTarget();
+        return sign.getTarget();
     }
 
+    @Nullable
     public Signal.Type getType() {
-        return signal.getType();
+        return sign instanceof Signal signal1? signal1.getType() : null;
     }
 
 
@@ -54,6 +55,6 @@ public class ClientSignal{
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ClientSignal clientSignal  && clientSignal.getTarget().equals(this.getTarget());
+        return obj instanceof ClientSign clientSignal  && clientSignal.getTarget().equals(this.getTarget());
     }
 }

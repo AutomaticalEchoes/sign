@@ -30,7 +30,7 @@ import java.awt.*;
 import java.text.DecimalFormat;
 
 @OnlyIn(Dist.CLIENT)
-public class SignalRenderQue extends Utils.LimitList<ClientSignal> {
+public class SignalRenderQue extends Utils.LimitList<ClientSign> {
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##0.00");
     public static final ResourceLocation VIEW_FACE = new ResourceLocation(SimpleSign.MODID,"textures/view_face.png");
     public SignalRenderQue(int size){
@@ -47,7 +47,7 @@ public class SignalRenderQue extends Utils.LimitList<ClientSignal> {
         Vec3 upVec3 = new Vec3(mainCamera.getUpVector());
         Vec3 leftVec3 = new Vec3(mainCamera.getLeftVector());
         Vec3 viewVec3 = new Vec3(mainCamera.getLookVector());
-        for (ClientSignal sign : this) {
+        for (ClientSign sign : this) {
             if (!sign.CanUse()) {
                 remove(sign);
                 continue;
@@ -108,7 +108,7 @@ public class SignalRenderQue extends Utils.LimitList<ClientSignal> {
         Matrix4f matrix4f = ifrustum.getMatrix();
 //        float Ytan = 1.0f / matrix4f.m00();
         Vec3 viewVec = new Vec3(mainCamera.getLookVector());
-        for (ClientSignal sign : this) {
+        for (ClientSign sign : this) {
             if (!sign.CanUse()) {
                 remove(sign);
                 continue;

@@ -10,9 +10,7 @@
     "PlayerMixin"
   ],
   "client": [
-    "IFrustum",
-    "LevelRenderMixin",
-    "MinecraftMixin"
+    "IFrustum"
   ],
   "injectors": {
     "defaultRequire": 1
