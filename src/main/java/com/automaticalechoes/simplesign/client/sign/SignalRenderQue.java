@@ -113,6 +113,7 @@ public class SignalRenderQue extends Utils.LimitList<ClientSign> {
                 remove(sign);
                 continue;
             }
+            ItemStack itemStack = sign.getItemStack();
             Vec3 renderPos = sign.getPointPos().subtract(mainCamera.getPosition());
 //            boolean out = !frustum.isVisible(AABB.ofSize(sign.getPointPos(), 0, 0, 0));
             double dotView = renderPos.dot(viewVec);
@@ -138,10 +139,15 @@ public class SignalRenderQue extends Utils.LimitList<ClientSign> {
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(x * mc.getWindow().getGuiScaledWidth(),  y * mc.getWindow().getGuiScaledHeight(), w);
 
-            guiGraphics.pose().pushPose();
-            guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(45.0F));
-            guiGraphics.blit(SignalRender.resourceLocation(sign.getType()), - 12, - 12, 0, 0, 24, 24, 24, 24);
-            guiGraphics.pose().popPose();
+            if(itemStack != null && Utils.ShouldShowDetail()){
+                guiGraphics.renderItem(itemStack, - 8,  - 8);
+            }else{
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(45.0F));
+                guiGraphics.blit(SignalRender.resourceLocation(sign.getType()), - 12, - 12, 0, 0, 24, 24, 24, 24);
+                guiGraphics.pose().popPose();
+            }
+
 
             guiGraphics.drawCenteredString(mc.font, distance, 0, 10, color.getRGB());
             guiGraphics.pose().popPose();

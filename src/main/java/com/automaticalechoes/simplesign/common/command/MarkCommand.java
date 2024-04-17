@@ -69,11 +69,11 @@ public class MarkCommand {
                .then(MARK
                        .then(ENTITY.executes(context -> Mark(context.getSource(),null ,EntityArgument.getEntity(context,"entity")))
                                .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
-                       .then(BLOCKPOS.executes(context -> Mark(context.getSource(), BlockPosArgument.getBlockPos(context,"blockPos"),null)))
-                       .then(SIGNAL
-                               .then(ENTITY.executes(context -> Signal(context.getSource(), context.getArgument("sign_type", Signal.Type.class),null ,EntityArgument.getEntity(context,"entity")))
-                                       .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
-                               .then(BLOCKPOS.executes(context -> Signal(context.getSource(), context.getArgument("sign_type", Signal.Type.class), BlockPosArgument.getBlockPos(context,"blockPos"),null))))));
+                       .then(BLOCKPOS.executes(context -> Mark(context.getSource(), BlockPosArgument.getBlockPos(context,"blockPos"),null))))
+               .then(SIGNAL
+                       .then(ENTITY.executes(context -> Signal(context.getSource(), context.getArgument("sign_type", Signal.Type.class),null ,EntityArgument.getEntity(context,"entity")))
+                               .then(SLOT.executes(context -> PingSlot(context.getSource(), EntityArgument.getEntity(context,"entity"),SlotArgument.getSlot(context,"equip")))))
+                       .then(BLOCKPOS.executes(context -> Signal(context.getSource(), context.getArgument("sign_type", Signal.Type.class), BlockPosArgument.getBlockPos(context,"blockPos"),null)))));
    }
 
    public static int Mark(CommandSourceStack sourceStack, @Nullable BlockPos pos, @Nullable net.minecraft.world.entity.Entity entity) throws CommandSyntaxException {
@@ -119,7 +119,7 @@ public class MarkCommand {
        Sign finalMark = mark;
        HoverEvent finalHoverEvent = hoverEvent;
 
-       MutableComponent mutableComponent = DecorateMessage(finalMark instanceof Signal signal? signal.getType() : null, markName, posMessage).withStyle(style -> style
+       MutableComponent mutableComponent = DecorateMessage(null, markName, posMessage).withStyle(style -> style
                        .withColor(ChatFormatting.GRAY)
                        .withHoverEvent(finalHoverEvent)
                        .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi getmark " + finalMark.CreateTag())));
@@ -229,6 +229,8 @@ public class MarkCommand {
                 case FOCUS -> mutableComponent.append(FOCUS_NAME);
                 case QUESTION -> mutableComponent.append(QUEST_POS);
             }
+        }else {
+            mutableComponent.append(MARKED);
         }
 //
         mutableComponent.append(markName);
