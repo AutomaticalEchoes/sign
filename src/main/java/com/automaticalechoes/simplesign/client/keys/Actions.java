@@ -34,7 +34,7 @@ public class Actions {
 
     public static void GetSignWhenReceived(MutableComponent component){
         String value = component.getStyle().getClickEvent().getValue();
-        ClientCommandHandler.runCommand(value.substring(1) + " " + ClientConfig.DEFAULT_MARK_KEEP_TIME.get());
+        ClientCommandHandler.runCommand(value.substring(1) + " " + ClientConfig.DEFAULT_MARK_KEEP_TIME.get() * 20);
     }
 
     public static void RemoveMark(){

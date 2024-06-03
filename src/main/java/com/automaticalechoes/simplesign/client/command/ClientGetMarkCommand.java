@@ -25,7 +25,7 @@ public class ClientGetMarkCommand {
             Commands.argument("nbt", NbtTagArgument.nbtTag());
 
     public static final RequiredArgumentBuilder<CommandSourceStack, Integer> LIFECYCLE =
-            Commands.argument("lifecycle", IntegerArgumentType.integer(-1, 300));
+            Commands.argument("lifecycle", IntegerArgumentType.integer(-1, 1200));
 
     public static void register(CommandDispatcher<CommandSourceStack> p_249870_) {
         p_249870_.register(SimpleSign.SSI

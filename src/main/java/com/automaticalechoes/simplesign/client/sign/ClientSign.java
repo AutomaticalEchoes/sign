@@ -50,6 +50,14 @@ public class ClientSign {
         return getTarget().getItemStack();
     }
 
+    public int getLifecycle() {
+        return lifecycle;
+    }
+
+    public void setLifecycle(int lifecycle) {
+        this.lifecycle = lifecycle;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof ClientSign clientSignal && clientSignal.getTarget().equals(this.getTarget());

@@ -21,6 +21,8 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.ArrayDeque;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 @OnlyIn(Dist.CLIENT)
@@ -59,22 +61,6 @@ public class Utils {
             return hitResult;
         }
         return null;
-    }
-
-    public static class LimitList<T> extends LinkedList<T>{
-        private final int limitSize;
-        public LimitList(int size){
-            this.limitSize = size;
-        }
-
-        @Override
-        public boolean add(T t) {
-            if(this.contains(t))
-            if(size() >= limitSize){
-                poll();
-            }
-            return super.add(t);
-        }
     }
 
     public static boolean ShouldEntityGlow(){
