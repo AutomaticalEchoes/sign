@@ -69,6 +69,7 @@ public class Utils {
 
         @Override
         public boolean add(T t) {
+            if(this.contains(t))
             if(size() >= limitSize){
                 poll();
             }

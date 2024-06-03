@@ -1,7 +1,6 @@
 package com.automaticalechoes.simplesign.client.sign;
 
 import com.automaticalechoes.simplesign.common.sign.Sign;
-import com.automaticalechoes.simplesign.common.sign.Signal;
 import com.automaticalechoes.simplesign.common.sign.target.SignalTarget;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -14,21 +13,19 @@ public class ClientSign {
     private final Sign sign;
     private int lifecycle = 200;
 
-    public ClientSign(CompoundTag tag){
+    public ClientSign(CompoundTag tag, int lifecycle){
         this.sign = Sign.fromTag(tag);
-        this.lifecycle = sign instanceof Signal ? 200 : -1;
+        this.lifecycle = lifecycle;
     }
 
+    public ClientSign(CompoundTag tag){
+        this.sign = Sign.fromTag(tag);
+        this.lifecycle = -1;
+    }
 
     public SignalTarget getTarget() {
         return sign.getTarget();
     }
-
-    @Nullable
-    public Signal.Type getType() {
-        return sign instanceof Signal signal1? signal1.getType() : null;
-    }
-
 
     public void tick(){
         if(lifecycle > 0) lifecycle --;
@@ -55,6 +52,6 @@ public class ClientSign {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ClientSign clientSignal  && clientSignal.getTarget().equals(this.getTarget());
+        return obj instanceof ClientSign clientSignal && clientSignal.getTarget().equals(this.getTarget());
     }
 }

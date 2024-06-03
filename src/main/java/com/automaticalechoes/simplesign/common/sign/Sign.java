@@ -17,11 +17,7 @@ public interface Sign {
      CompoundTag CreateTag();
 
      static Sign fromTag(CompoundTag tag){
-          if(tag.contains(RENDER_TYPE)){
-               return new Signal(SignalTarget.FromTag(tag), Signal.Type.fromTag(tag));
-          }else {
-               return new SignImp(SignalTarget.FromTag(tag));
-          }
+          return new SignImp(SignalTarget.FromTag(tag));
      }
 
 }

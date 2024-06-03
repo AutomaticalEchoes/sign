@@ -14,12 +14,10 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class ClientEvents {
-    public static final SignalRenderQue SIGNALS_RENDER = new SignalRenderQue(5);
     public static final SignalRenderQue MARK_RENDER = new SignalRenderQue(15);
     @SubscribeEvent
     public static void Render(RenderGuiOverlayEvent.Post event){
         if(event.getOverlay().overlay() == VanillaGuiOverlay.HOTBAR.type().overlay()){
-            SIGNALS_RENDER.render2D(event);
             MARK_RENDER.render2D(event);
 //            SIGNS.renderViewRot(event);
         }

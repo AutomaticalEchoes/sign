@@ -1,10 +1,9 @@
 package com.automaticalechoes.simplesign.client.keys;
 
 import com.automaticalechoes.simplesign.SimpleSign;
+import com.automaticalechoes.simplesign.client.ClientConfig;
 import com.automaticalechoes.simplesign.client.ClientEvents;
 import com.automaticalechoes.simplesign.client.Utils;
-import com.automaticalechoes.simplesign.common.sign.Sign;
-import com.automaticalechoes.simplesign.common.sign.Signal;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -18,7 +17,7 @@ import net.minecraftforge.client.ClientCommandHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class Actions {
-    public static void PostSign(Signal.Type type){
+    public static void PostSign(){
         HitResult hitResult = Utils.IPick(1.0F);
         String message = "";
         if(hitResult instanceof BlockHitResult blockHitResult && blockHitResult.getType() != HitResult.Type.MISS){
@@ -28,14 +27,14 @@ public class Actions {
             message = entityHitResult.getEntity().getUUID().toString();
         }
         if(message.equals("")) return;
-        String s1 = SharedConstants.filterText("/ssi mark " + type.name() + " " + message);
+        String s1 = SharedConstants.filterText("/ssi mark " + message);
         SendCommand(s1);
 
     }
 
     public static void GetSignWhenReceived(MutableComponent component){
         String value = component.getStyle().getClickEvent().getValue();
-        ClientCommandHandler.runCommand(value.substring(1));
+        ClientCommandHandler.runCommand(value.substring(1) + " " + ClientConfig.DEFAULT_MARK_KEEP_TIME.get());
     }
 
     public static void RemoveMark(){

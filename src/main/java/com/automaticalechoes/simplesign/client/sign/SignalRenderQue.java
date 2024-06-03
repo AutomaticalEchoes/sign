@@ -67,7 +67,6 @@ public class SignalRenderQue extends Utils.LimitList<ClientSign> {
             MutableComponent distance = Component.literal(DECIMAL_FORMAT.format(length)).append(Component.translatable("B").withStyle(ChatFormatting.GOLD));
             MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
 
-
             float cos = (float) (viewDot / length);
             float scale = (float) (0.1F * length * cos);
             scale = mc.player.isScoping() ? mc.player.getFieldOfViewModifier() * scale : scale;
@@ -85,9 +84,8 @@ public class SignalRenderQue extends Utils.LimitList<ClientSign> {
                 SignalRender.renderItem(itemStack, poseStack, bufferSource);
                 poseStack.popPose();
             }else{
-                SignalRender.RenderPointTexture(poseStack, sign.getType(), mc.renderBuffers().outlineBufferSource(),-1,color);
+                SignalRender.RenderPointTexture(poseStack, mc.renderBuffers().outlineBufferSource(),-1,color);
             }
-
             poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             poseStack.scale(0.05f,0.05f,1);
             SignalRender.renderText(poseStack, distance);
@@ -144,7 +142,7 @@ public class SignalRenderQue extends Utils.LimitList<ClientSign> {
             }else{
                 guiGraphics.pose().pushPose();
                 guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(45.0F));
-                guiGraphics.blit(SignalRender.resourceLocation(sign.getType()), - 12, - 12, 0, 0, 24, 24, 24, 24);
+                guiGraphics.blit(SignalRender.RESOURCE_DEFAULT, - 12, - 12, 0, 0, 24, 24, 24, 24);
                 guiGraphics.pose().popPose();
             }
 
