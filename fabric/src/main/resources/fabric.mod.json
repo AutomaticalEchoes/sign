@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "simplesign",
+  "version": "${version}",
+
+  "name": "SimpleSign",
+  "description": "",
+  "authors": [],
+  "contact": {},
+
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "automaticalechoes.simplesign.simplesign.fabric.SimpleSignFabric"
+    ]
+  },
+  "mixins": [
+    "simplesign.mixins.json",
+    "simplesign-common.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "minecraft": ">=1.20.1"
+  }
+}
