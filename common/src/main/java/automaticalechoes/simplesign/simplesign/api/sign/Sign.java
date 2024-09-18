@@ -9,7 +9,7 @@ public interface Sign {
      SignalTarget target();
 //     Vec3 getPointPos();
      CompoundTag CreateTag();
-
+     int typeN();
      static Sign fromTag(CompoundTag tag){
           return new SignImp(SignalTarget.FromTag(tag), tag.getInt(TYPE));
      }

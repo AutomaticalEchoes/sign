@@ -1,6 +1,6 @@
 package automaticalechoes.simplesign.simplesign.mixin;
 
-import automaticalechoes.simplesign.simplesign.api.EquipSetOptions;
+import automaticalechoes.simplesign.simplesign.api.IOptions;
 import automaticalechoes.simplesign.simplesign.client.keys.ModKeyMappings;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -9,7 +9,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(Options.class)
-public class OptionMixin implements EquipSetOptions {
+public class OptionMixin implements IOptions {
     @Unique
     private static boolean equipset$KeyMappingInit = false;
     @Mutable

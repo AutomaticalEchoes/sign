@@ -60,28 +60,21 @@ public class Utils {
         return null;
     }
 
-    public static boolean ShouldEntityGlow(){
-        return ClientConfig.SHOULD_ENTITY_GLOW.get();
-    }
 
-    public static boolean ShouldShowDetail(){
-        return ClientConfig.SHOULD_SHOW_DETAIL.get();
-    }
-
-    @NotNull
-    public static RenderType getFallbackItemRenderType(ItemStack stack, BakedModel model, boolean cull) {
-        if (stack.getItem() instanceof BlockItem blockItem) {
-            var renderTypes = model.getRenderTypes(blockItem.getBlock().defaultBlockState(), RandomSource.create(42), ModelData.EMPTY);
-            if (renderTypes.contains(RenderType.translucent())){
-                return getEntityRenderType(RenderType.translucent(), cull);
-            }else {
-                return IRenderType.entityCutOut;
-            }
-        }else {
-            return cull ? IRenderType.translucentCullBlock : IRenderType.translucentItem;
-        }
-//
-    }
+//    @NotNull
+//    public static RenderType getFallbackItemRenderType(ItemStack stack, BakedModel model, boolean cull) {
+//        if (stack.getItem() instanceof BlockItem blockItem) {
+//            var renderTypes = model.getRenderTypes(blockItem.getBlock().defaultBlockState(), RandomSource.create(42), ModelData.EMPTY);
+//            if (renderTypes.contains(RenderType.translucent())){
+//                return getEntityRenderType(RenderType.translucent(), cull);
+//            }else {
+//                return IRenderType.entityCutOut;
+//            }
+//        }else {
+//            return cull ? IRenderType.translucentCullBlock : IRenderType.translucentItem;
+//        }
+////
+//    }
 
     public static RenderType getEntityRenderType(RenderType chunkRenderType, boolean cull)
     {

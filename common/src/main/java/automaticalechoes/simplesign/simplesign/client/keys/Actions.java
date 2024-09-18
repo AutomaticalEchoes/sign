@@ -3,7 +3,6 @@ package automaticalechoes.simplesign.simplesign.client.keys;
 
 import automaticalechoes.simplesign.simplesign.SimpleSign;
 import automaticalechoes.simplesign.simplesign.client.Utils;
-import com.automaticalechoes.simplesign.client.ClientEvents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
@@ -32,10 +31,10 @@ public class Actions {
 
     }
 
-    public static void GetSignWhenReceived(MutableComponent component){
-        String value = component.getStyle().getClickEvent().getValue();
-        ClientCommandHandler.runCommand(value.substring(1) + " " + ClientConfig.DEFAULT_MARK_KEEP_TIME.get() * 20);
-    }
+//    public static void GetSignWhenReceived(MutableComponent component){
+//        String value = component.getStyle().getClickEvent().getValue();
+//        ClientCommandHandler.runCommand(value.substring(1) + " " + ClientConfig.DEFAULT_MARK_KEEP_TIME.get() * 20);
+//    }
 
     public static void RemoveMark(){
         if(!SimpleSign.Client.MARK_RENDER.isEmpty()){

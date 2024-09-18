@@ -1,6 +1,7 @@
 package automaticalechoes.simplesign.simplesign.client.keys;
 
 import automaticalechoes.simplesign.simplesign.api.Config;
+import automaticalechoes.simplesign.simplesign.api.IOptions;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -34,10 +35,10 @@ public class ModKeyMappings {
             Register(new KeyMapping("sign.post_sign_default", InputConstants.KEY_V,"sign.category"), () -> Actions.PostSign());
         }
 
-        if(Config.getSsi$keyGetMark()){
-            Register(new KeyMapping("sign.get_sign",
-                    InputConstants.KEY_G,"sign.category"),Actions::GetSign);
-        }
+//        if(Config.getSsi$keyGetMark()){
+//            Register(new KeyMapping("sign.get_sign",
+//                    InputConstants.KEY_G,"sign.category"),Actions::GetSign);
+//        }
 
         if(Config.getSsi$keyRemoveMark()){
             Register(new KeyMapping("sign.remove_sign",
@@ -64,6 +65,6 @@ public class ModKeyMappings {
             Register(new KeyMapping("sign.ping_offhand",
                     InputConstants.KEY_F,"sign.category"),Actions::PingOff);
         }
-        Minecraft.getInstance().options.keyMappings = ArrayUtils.addAll(Minecraft.getInstance().options.keyMappings, ModKeyMappings.KEYMAPS.keySet().toArray(new KeyMapping[0]));
+        ((IOptions)Minecraft.getInstance().options).equipset$loadKeyMappings();
     }
 }

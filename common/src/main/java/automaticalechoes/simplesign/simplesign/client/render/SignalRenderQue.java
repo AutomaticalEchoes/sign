@@ -1,7 +1,9 @@
 package automaticalechoes.simplesign.simplesign.client.render;
 
 import automaticalechoes.simplesign.simplesign.SimpleSign;
+import automaticalechoes.simplesign.simplesign.api.Config;
 import automaticalechoes.simplesign.simplesign.client.ClientSign;
+import automaticalechoes.simplesign.simplesign.client.ILevelRender;
 import automaticalechoes.simplesign.simplesign.client.Utils;
 import automaticalechoes.simplesign.simplesign.mixin.IFrustum;
 import com.mojang.math.Axis;
@@ -28,6 +30,7 @@ import java.util.LinkedList;
 
 @Environment(EnvType.CLIENT)
 public class SignalRenderQue extends LinkedList<ClientSign> {
+    public static ResourceLocation RESOURCE_DEFAULT = new ResourceLocation(SimpleSign.MOD_ID,"textures/point_render/default.png");
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##0.00");
     public static final ResourceLocation VIEW_FACE = new ResourceLocation(SimpleSign.MOD_ID,"textures/view_face.png");
 
@@ -113,7 +116,7 @@ public class SignalRenderQue extends LinkedList<ClientSign> {
         Minecraft mc = Minecraft.getInstance();
 //        float aspect = (float)mc.getWindow().getWidth() / (float)mc.getWindow().getHeight();
         Camera mainCamera = mc.gameRenderer.getMainCamera();
-        Frustum frustum = mc.levelRenderer.getFrustum();
+        Frustum frustum = ((ILevelRender)mc.levelRenderer).getFrustum();
         IFrustum ifrustum = (IFrustum) frustum;
         Matrix4f matrix4f = ifrustum.getMatrix();
 //        float Ytan = 1.0f / matrix4f.m00();
@@ -149,12 +152,12 @@ public class SignalRenderQue extends LinkedList<ClientSign> {
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(x * mc.getWindow().getGuiScaledWidth(),  y * mc.getWindow().getGuiScaledHeight(), w);
 
-            if(itemStack != null && Utils.ShouldShowDetail()){
+            if(itemStack != null && Config.getSsi$shouldEntityGlow()){
                 guiGraphics.renderItem(itemStack, - 8,  - 8);
             }else{
                 guiGraphics.pose().pushPose();
                 guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(45.0F));
-                guiGraphics.blit(SignalRender.RESOURCE_DEFAULT, - 12, - 12, 0, 0, 24, 24, 24, 24);
+                guiGraphics.blit(RESOURCE_DEFAULT, - 12, - 12, 0, 0, 24, 24, 24, 24);
                 guiGraphics.pose().popPose();
             }
 

@@ -2,7 +2,7 @@ package automaticalechoes.simplesign.simplesign.api;
 
 import org.spongepowered.asm.mixin.Unique;
 
-public interface EquipSetOptions {
+public interface IOptions {
 
     @Unique
     void equipset$loadKeyMappings();

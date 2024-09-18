@@ -27,12 +27,14 @@ public class Config {
     static final String SSI$KEYMAPPING_REMOVE_MARK = "ssi_keymapping_remove_mark";
     static final String SSI$KEYMAPPING_CLEAR_MARK = "ssi_keymapping_clear_mark";
     static final String SSI$KEYMAPPING_SIGN_SLOT = "ssi_keymapping_sign_slot";
+    static final String SSI$ENTITY_GLOW = "ssi_entity_glow";
 
     static Value<Boolean> SSI$KEY_MARK_DEFAULT = Value.createBoolean(SSI$KEYMAPPING_MARK_DEFAULT);
     static Value<Boolean> SSI$KEY_GET_MARK = Value.createBoolean(SSI$KEYMAPPING_GET_MARK);
     static Value<Boolean> SSI$KEY_REMOVE_MARK = Value.createBoolean(SSI$KEYMAPPING_REMOVE_MARK);
     static Value<Boolean> SSI$KEY_CLEAR_MARK = Value.createBoolean(SSI$KEYMAPPING_CLEAR_MARK);
     static Value<Boolean> SSI$KEY_SIGN_SLOT = Value.createBoolean(SSI$KEYMAPPING_SIGN_SLOT);
+    static Value<Boolean> SSI$SHOULD_ENTITY_GLOW = Value.createBoolean(SSI$ENTITY_GLOW);
 
     static class Value<T>{
         String name;
@@ -76,6 +78,10 @@ public class Config {
 
     public static Boolean getSsi$keySignSlot() {
         return SSI$KEY_SIGN_SLOT.value;
+    }
+
+    public static Boolean getSsi$shouldEntityGlow() {
+        return SSI$SHOULD_ENTITY_GLOW.value;
     }
 
     public static void save(){

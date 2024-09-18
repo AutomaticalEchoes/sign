@@ -25,7 +25,7 @@ public class ClientSign {
     }
 
     public SignalTarget getTarget() {
-        return sign.getTarget();
+        return sign.target();
     }
 
     public void tick(){

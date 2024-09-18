@@ -4,12 +4,15 @@ import automaticalechoes.simplesign.simplesign.api.sign.Sign;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.*;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mutable;
+
+import java.util.function.BiFunction;
 
 public class SignMessageBuilder implements MessageBuilder{
 
@@ -60,8 +63,8 @@ public class SignMessageBuilder implements MessageBuilder{
         return this;
     }
 
-    public MutableComponent BuildSignMessage(Sign sign) {
-        return SignMessageBuilder.DecorateMessage(markName, pos).withStyle(style -> style
+    public MutableComponent BuildSignMessage(Sign sign, ServerPlayer player, @Nullable Entity entity) {
+        return MessageBuilder.getBuilder(sign, player, entity).apply(markName, pos).withStyle(style -> style
                 .withColor(ChatFormatting.GRAY)
                 .withHoverEvent(hoverEvent)
                 .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi getmark " + sign.CreateTag())));

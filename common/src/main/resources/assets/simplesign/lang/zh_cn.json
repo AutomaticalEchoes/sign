@@ -14,7 +14,8 @@
   "sign.exist": "目标追踪已启用",
   "sign.self": "不能追踪自己",
   "sign.no_useful_time": "可用消息不足",
-
+  "sign.attention": "注意",
+  "sign.attack_enemy": "优先攻击",
   "sign.none": "，他什么都没穿",
   "sign._s": "的",
   "sign.mainhand": "主手",

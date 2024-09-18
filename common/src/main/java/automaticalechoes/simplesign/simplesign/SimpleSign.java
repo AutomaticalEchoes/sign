@@ -1,5 +1,6 @@
 package automaticalechoes.simplesign.simplesign;
 
+import automaticalechoes.simplesign.simplesign.client.keys.ModKeyMappings;
 import automaticalechoes.simplesign.simplesign.client.render.SignalRenderQue;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.logging.LogUtils;
@@ -17,11 +18,12 @@ public class SimpleSign
 	public static final LiteralArgumentBuilder<CommandSourceStack> SSI =
 			Commands.literal("ssi").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
 	public static void init() {
-		
+//		ModKeyMappings.init();
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static class Client{
 		public static final SignalRenderQue MARK_RENDER = new SignalRenderQue(15);
+
 	}
 }
