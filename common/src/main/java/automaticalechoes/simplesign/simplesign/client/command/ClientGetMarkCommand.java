@@ -3,7 +3,6 @@ package automaticalechoes.simplesign.simplesign.client.command;
 import automaticalechoes.simplesign.simplesign.SimpleSign;
 import automaticalechoes.simplesign.simplesign.api.sign.target.EntityTarget;
 import automaticalechoes.simplesign.simplesign.client.ClientSign;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -23,7 +22,6 @@ public class ClientGetMarkCommand {
             Commands.literal("getmark").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
     public static final RequiredArgumentBuilder<CommandSourceStack, Tag> NBT =
             Commands.argument("nbt", NbtTagArgument.nbtTag());
-
     public static final RequiredArgumentBuilder<CommandSourceStack, Integer> LIFECYCLE =
             Commands.argument("lifecycle", IntegerArgumentType.integer(-1, 1200));
 

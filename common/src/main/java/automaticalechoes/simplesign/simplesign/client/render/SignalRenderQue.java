@@ -54,62 +54,6 @@ public class SignalRenderQue extends LinkedList<ClientSign> {
         return super.add(clientSign);
     }
 
-//    @Deprecated
-//    public void render3D(RenderLevelStageEvent event){
-//        if(this.isEmpty()) return;
-//        PoseStack poseStack = event.getPoseStack();
-//        Frustum frustum = event.getFrustum();
-//        Minecraft mc = Minecraft.getInstance();
-//        Camera mainCamera = mc.gameRenderer.getMainCamera();
-//        Vec3 upVec3 = new Vec3(mainCamera.getUpVector());
-//        Vec3 leftVec3 = new Vec3(mainCamera.getLeftVector());
-//        Vec3 viewVec3 = new Vec3(mainCamera.getLookVector());
-//        for (ClientSign sign : this) {
-//            if (!sign.CanUse()) {
-//                remove(sign);
-//                continue;
-//            }
-//
-//            boolean inSide = frustum.isVisible(new AABB(sign.getPointPos().x, sign.getPointPos().y, sign.getPointPos().z, sign.getPointPos().x, sign.getPointPos().y, sign.getPointPos().z));
-//            if(!inSide) continue;
-//            Vec3 renderPos = sign.getPointPos().subtract(mainCamera.getPosition());
-//            double length = renderPos.length();
-//            double upDot = renderPos.dot(upVec3);
-//            double leftDot = renderPos.dot(leftVec3);
-//            double viewDot = renderPos.dot(viewVec3);
-//            double angY = Math.atan(upDot / viewDot);
-//            double angX = Math.atan(leftDot / viewDot);
-//
-//            Color color = sign.getColor();
-//            MutableComponent distance = Component.literal(DECIMAL_FORMAT.format(length)).append(Component.translatable("B").withStyle(ChatFormatting.GOLD));
-//            MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
-//
-//            float cos = (float) (viewDot / length);
-//            float scale = (float) (0.1F * length * cos);
-//            scale = mc.player.isScoping() ? mc.player.getFieldOfViewModifier() * scale : scale;
-//            poseStack.pushPose();
-//            poseStack.translate(renderPos.x, renderPos.y, renderPos.z);
-//            poseStack.scale(scale, scale, scale);
-//            poseStack.mulPose(mainCamera.rotation());
-//            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-//            ItemStack itemStack = sign.getItemStack();
-//
-//            if(itemStack != null && Utils.ShouldShowDetail()){
-//                poseStack.pushPose();
-//                poseStack.mulPose(Axis.YP.rotation((float) angX));
-//                poseStack.mulPose(Axis.XP.rotation((float) angY));
-//                SignalRender.renderItem(itemStack, poseStack, bufferSource);
-//                poseStack.popPose();
-//            }else{
-//                SignalRender.RenderPointTexture(poseStack, mc.renderBuffers().outlineBufferSource(),-1,color);
-//            }
-//            poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-//            poseStack.scale(0.05f,0.05f,1);
-//            SignalRender.renderText(poseStack, distance);
-//            poseStack.popPose();
-//
-//        }
-//    }
 
     public void render2D(GuiGraphics guiGraphics){
         if(this.isEmpty()) return;

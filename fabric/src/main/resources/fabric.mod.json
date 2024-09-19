@@ -15,6 +15,9 @@
   "entrypoints": {
     "main": [
       "automaticalechoes.simplesign.simplesign.fabric.SimpleSignFabric"
+    ],
+    "client":[
+      "automaticalechoes.simplesign.simplesign.fabric.SimpleSignFabricClient"
     ]
   },
   "mixins": [
