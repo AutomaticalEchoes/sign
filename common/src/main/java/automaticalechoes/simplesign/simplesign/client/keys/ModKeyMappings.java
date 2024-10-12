@@ -7,8 +7,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import org.apache.commons.lang3.ArrayUtils;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +29,7 @@ public class ModKeyMappings {
     }
 
     public static void init(){
+        ((IOptions)Minecraft.getInstance().options).equipset$removeKeyMappings();
         if(Config.getSsi$keyMarker()){
             Register(new KeyMapping("sign.post_sign_default", InputConstants.KEY_V,"sign.category"), () -> Actions.PostSign());
         }

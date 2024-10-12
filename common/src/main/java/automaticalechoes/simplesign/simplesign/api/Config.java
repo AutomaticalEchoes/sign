@@ -22,12 +22,12 @@ public class Config {
     private static final Splitter OPTION_SPLITTER = Splitter.on(':').limit(2);
     private static final String CONFIG_FILE = "config\\simplesign_client_config.txt";
     static final Map<String, Value<?>> VALUES = new HashMap<>();
-    static final String SSI$KEYMAPPING_MARK_DEFAULT = "ssi_keymapping_mark";
-    static final String SSI$KEYMAPPING_GET_MARK = "ssi_keymapping_get_mark";
-    static final String SSI$KEYMAPPING_REMOVE_MARK = "ssi_keymapping_remove_mark";
-    static final String SSI$KEYMAPPING_CLEAR_MARK = "ssi_keymapping_clear_mark";
-    static final String SSI$KEYMAPPING_SIGN_SLOT = "ssi_keymapping_sign_slot";
-    static final String SSI$ENTITY_GLOW = "ssi_entity_glow";
+    static final String SSI$KEYMAPPING_MARK_DEFAULT = "keymapping_mark";
+    static final String SSI$KEYMAPPING_GET_MARK = "keymapping_get_mark";
+    static final String SSI$KEYMAPPING_REMOVE_MARK = "keymapping_remove_mark";
+    static final String SSI$KEYMAPPING_CLEAR_MARK = "keymapping_clear_mark";
+    static final String SSI$KEYMAPPING_SIGN_SLOT = "keymapping_sign_slot";
+    static final String SSI$ENTITY_GLOW = "entity_glow";
 
     static Value<Boolean> SSI$KEY_MARK_DEFAULT = Value.createBoolean(SSI$KEYMAPPING_MARK_DEFAULT);
     static Value<Boolean> SSI$KEY_GET_MARK = Value.createBoolean(SSI$KEYMAPPING_GET_MARK);

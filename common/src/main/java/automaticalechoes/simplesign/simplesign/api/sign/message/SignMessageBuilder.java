@@ -67,7 +67,7 @@ public class SignMessageBuilder implements MessageBuilder{
         return MessageBuilder.getBuilder(sign, player, entity).apply(markName, pos).withStyle(style -> style
                 .withColor(ChatFormatting.GRAY)
                 .withHoverEvent(hoverEvent)
-                .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi getmark " + sign.CreateTag())));
+                .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi_client getmark " + sign.CreateTag())));
     }
 
 
