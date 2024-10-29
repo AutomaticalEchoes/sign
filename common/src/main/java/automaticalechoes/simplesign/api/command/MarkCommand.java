@@ -36,7 +36,7 @@ import net.minecraft.world.scores.Team;
 import org.jetbrains.annotations.Nullable;
 
 
-public classMarkCommand {
+public class MarkCommand {
 //    public static final LiteralArgumentBuilder<CommandSourceStack> =
 //            Commands.literal("mark").requires(commandSourceStack -> commandSourceStack.hasPermission(0));
     public static final RequiredArgumentBuilder<CommandSourceStack, Coordinates> BLOCKPOS =
