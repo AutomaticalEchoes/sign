@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "automaticalechoes.simplesign.simplesign.forge.mixin",
+  "package": "automaticalechoes.simplesign.forge.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],

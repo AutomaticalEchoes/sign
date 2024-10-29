@@ -14,10 +14,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "automaticalechoes.simplesign.simplesign.fabric.SimpleSignFabric"
+      "automaticalechoes.simplesign.fabric.SimpleSignFabric"
     ],
     "client":[
-      "automaticalechoes.simplesign.simplesign.fabric.SimpleSignFabricClient"
+      "automaticalechoes.simplesign.fabric.SimpleSignFabricClient"
     ]
   },
   "mixins": [

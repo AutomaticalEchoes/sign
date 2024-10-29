@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "automaticalechoes.simplesign.simplesign.mixin",
+  "package": "automaticalechoes.simplesign.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "PlayerListMixin",
