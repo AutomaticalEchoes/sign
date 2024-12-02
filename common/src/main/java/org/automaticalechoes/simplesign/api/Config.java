@@ -18,14 +18,26 @@ public class Config {
     private static final String CONFIG_FILE = "config\\echoes_mods_client_config.txt";
     static final String SSI$KEY_PING = "simplesign_key_ping";
     static final String SSI$AUTO_RECEIVE = "simplesign_auto_receive";
+    static final String SSI$AUTO_RECEIVE_KEEP_TIME = "simplesign_auto_receive_keep_time";
+    static final String SSI$AUTO_RECEIVE_DISTANCE = "simplesign_auto_receive_distance";
     static final String SSI$KEY_MARK = "simplesign_key_mark";
     static final String SSI$KEY_CLEAR_MARK = "simplesign_key_clear_mark";
     static final String SSI$KEY_REMOVE_MARK = "simplesign_key_remove_mark";
     static Boolean KEY_PING = true;
     static Boolean AUTO_RECEIVE = true;
+    static Integer AUTO_RECEIVE_KEEP_TIME = 10;
+    static Integer AUTO_RECEIVE_DISTANCE = 200;
     static Boolean KEY_MARK = true;
     static Boolean KEY_CLEAR_MARK = true;
     static Boolean KEY_REMOVE_MARK = true;
+
+    public static Integer AutoReceiveKeepTime(){
+        return AUTO_RECEIVE_KEEP_TIME;
+    }
+
+    public static Integer AutoReceiveDistance(){
+        return AUTO_RECEIVE_DISTANCE;
+    }
 
     public static boolean AutoReceive() {
         return AUTO_RECEIVE;
@@ -56,7 +68,9 @@ public class Config {
         try {
             final PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(configDir), StandardCharsets.UTF_8));
             try {
-                printWriter.println(SSI$AUTO_RECEIVE+ ":" + AUTO_RECEIVE);
+                printWriter.println(SSI$AUTO_RECEIVE + ":" + AUTO_RECEIVE);
+                printWriter.println(SSI$AUTO_RECEIVE_KEEP_TIME + ":" + AUTO_RECEIVE_KEEP_TIME);
+                printWriter.println(SSI$AUTO_RECEIVE_DISTANCE + ":" + AUTO_RECEIVE_DISTANCE);
                 printWriter.println(SSI$KEY_PING + ":" + KEY_PING);
                 printWriter.println(SSI$KEY_MARK + ":" + KEY_MARK);
                 printWriter.println(SSI$KEY_CLEAR_MARK + ":" + KEY_CLEAR_MARK);
@@ -120,6 +134,12 @@ public class Config {
             }
             if(compoundTag.contains(SSI$KEY_REMOVE_MARK)) {
                 KEY_REMOVE_MARK = isTrue(compoundTag.getString(SSI$KEY_REMOVE_MARK));
+            }
+            if(compoundTag.contains(SSI$AUTO_RECEIVE_KEEP_TIME)){
+                AUTO_RECEIVE_KEEP_TIME = Integer.getInteger(compoundTag.getString(SSI$AUTO_RECEIVE_KEEP_TIME));
+            }
+            if (compoundTag.contains(SSI$AUTO_RECEIVE_DISTANCE)) {
+                AUTO_RECEIVE_DISTANCE = Integer.getInteger(compoundTag.getString(SSI$AUTO_RECEIVE_DISTANCE));
             }
             KeyMapping.resetMapping();
         } catch (Exception var7) {

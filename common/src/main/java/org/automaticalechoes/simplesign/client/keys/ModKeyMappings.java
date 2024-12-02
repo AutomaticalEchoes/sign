@@ -19,13 +19,14 @@ public class ModKeyMappings {
 //        return keyMapping;
     }
 
-    public static void Actions(){
+    public static boolean Actions(){
         for (Map.Entry<KeyMapping, Runnable> entry : KEYMAPS.entrySet()) {
             if(entry.getKey().isDown()) {
                 entry.getValue().run();
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     public static void init(IOptions options){

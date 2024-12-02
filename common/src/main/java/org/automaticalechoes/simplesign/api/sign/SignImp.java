@@ -12,4 +12,8 @@ public record SignImp(SignalTarget target, int typeN) implements Sign {
         compoundTag.putInt(TYPE, typeN);
         return compoundTag;
     }
+
+    static Sign fromTag(CompoundTag tag){
+        return new SignImp(SignalTarget.FromTag(tag), tag.getInt(TYPE));
+    }
 }

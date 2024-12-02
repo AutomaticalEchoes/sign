@@ -30,7 +30,7 @@ public class SignMessageBuilder implements MessageBuilder{
     public SignMessageBuilder WithEntity(Entity entity) {
         Component component = entity instanceof Player ? entity.getName() : entity.getType().getDescription();
         this.markName = ((MutableComponent)component).withStyle(STYLE_ENTITY);
-        WithHoverEntity(entity);
+        this.WithHoverEntity(entity);
         return this;
     }
 
@@ -61,10 +61,11 @@ public class SignMessageBuilder implements MessageBuilder{
     }
 
     public MutableComponent BuildSignMessage(Sign sign, ServerPlayer player, @Nullable Entity entity) {
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi_client getmark " + sign.CreateTag());
         return MessageBuilder.getBuilder(sign, player, entity).apply(markName, pos).withStyle(style -> style
                 .withColor(ChatFormatting.GRAY)
                 .withHoverEvent(hoverEvent)
-                .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi_client getmark " + sign.CreateTag())));
+                .withClickEvent(clickEvent));
     }
 
 

@@ -37,7 +37,6 @@ public class BlockTarget implements SignalTarget {
         return compoundTag;
     }
 
-
     @Override
     public Boolean CanUse() {
         Minecraft instance = Minecraft.getInstance();

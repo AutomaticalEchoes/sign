@@ -21,9 +21,10 @@ public class EntityTarget implements SignalTarget {
     protected final BlockPos pos;
     protected final UUID uuid;
     protected final ItemStack itemStack;
-    public EntityTarget(UUID uuid, BlockPos pos, @Nullable ItemStack itemStack){
+    public EntityTarget(UUID uuid, BlockPos pos, @Nullable Entity entity, @Nullable ItemStack itemStack){
         this.uuid = uuid;
         this.pos = pos;
+        this.entity = entity;
         this.itemStack = itemStack;
     }
 
@@ -50,7 +51,7 @@ public class EntityTarget implements SignalTarget {
         compoundTag.putLong(BLOCK_POS,this.pos.asLong());
         compoundTag.putString(TARGET_TYPE, ENTITY);
         if(itemStack !=null){
-            compoundTag.put(ITEM,itemStack.save(entity.level().registryAccess()));
+            compoundTag.put(ITEM,itemStack.save(entity.registryAccess()));
         }
         return compoundTag;
     }

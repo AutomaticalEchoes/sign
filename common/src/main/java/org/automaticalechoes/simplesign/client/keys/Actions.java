@@ -4,9 +4,11 @@ package org.automaticalechoes.simplesign.client.keys;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.apache.commons.lang3.StringUtils;
 import org.automaticalechoes.simplesign.Constants;
 import org.automaticalechoes.simplesign.api.Config;
 import org.automaticalechoes.simplesign.client.Utils;
@@ -23,7 +25,7 @@ public class Actions {
             message = entityHitResult.getEntity().getUUID().toString();
         }
         if(message.isEmpty()) return;
-        String s1 = "/ssi mark %s".formatted(message);
+        String s1 = "/ssi 0 %s".formatted(message);
         SendCommand(s1);
 
     }
@@ -31,26 +33,26 @@ public class Actions {
 
 
     public static void RemoveMark(){
-        if(!Constants.Client.MARK_RENDER.isEmpty()){
-            Constants.Client.MARK_RENDER.remove(Constants.Client.MARK_RENDER.size() - 1);
+        if(!Constants.Client.CLIENT_SIGNS.isEmpty()){
+            Constants.Client.CLIENT_SIGNS.removeLast();
         }
     }
 
     public static void ClearMark(){
-        Constants.Client.MARK_RENDER.clear();
+        Constants.Client.CLIENT_SIGNS.clear();
     }
 
     public static void Ping(String part){
         HitResult hitResult = Utils.IPick(1.0F);
         if(hitResult instanceof EntityHitResult entityHitResult){
            String uuid = entityHitResult.getEntity().getUUID().toString();
-           String s1 = "/ssi mark %s %s".formatted(uuid, part);
+           String s1 = "/ssi ping %s %s".formatted(uuid, part);
            SendCommand(s1);
         }
     }
 
     public static void AutoReceive(String part){
-        SendCommand(part + Config.);
+        SendCommand(StringUtil.trimChatMessage(StringUtils.normalizeSpace((part + " %s".formatted( Config.AutoReceiveKeepTime() * 100)).trim())));
     }
 
     public static void PingMain(){
@@ -79,9 +81,10 @@ public class Actions {
 
     public static void SendCommand(String command){
         if (command.startsWith("/")) {
-            if (!Minecraft.getInstance().player.connection.sendUnsignedCommand(command.substring(1))) {
-                Constants.LOG.error("Not allowed to run command with signed argument from click event: '{}'", command);
-            }
+            Minecraft.getInstance().player.connection.sendCommand(command.substring(1));
+//            if (!)) {
+//                Constants.LOG.error("Not allowed to run command with signed argument from click event: '{}'", command);
+//            }
         } else {
             Constants.LOG.error("Failed to run command without '/' prefix from click event: '{}'", command);
         }

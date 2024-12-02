@@ -1,15 +1,12 @@
 package org.automaticalechoes.simplesign;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.logging.LogUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import org.automaticalechoes.simplesign.client.render.SignalRenderQue;
+import org.automaticalechoes.simplesign.client.ClientSignalQue;
+import org.automaticalechoes.simplesign.client.render.SignalRender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class Constants {
 
@@ -24,6 +21,7 @@ public class Constants {
     }
 
     public static class Client{
-        public static final SignalRenderQue MARK_RENDER = new SignalRenderQue(15);
+        public static final ClientSignalQue CLIENT_SIGNS = new ClientSignalQue(15);
+
     }
 }

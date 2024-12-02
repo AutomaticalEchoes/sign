@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
+import org.automaticalechoes.simplesign.api.Config;
 import org.automaticalechoes.simplesign.api.sign.target.EntityTarget;
 import org.automaticalechoes.simplesign.client.ClientSign;
 
@@ -41,7 +42,7 @@ public class FabricClientGetMarkCommand {
         }
         ClientSign clientSignal = new ClientSign(compoundTag, lifecycle);
         if(CheckMark(sourceStack, clientSignal)){
-            Constants.Client.MARK_RENDER.add(clientSignal);
+            Constants.Client.CLIENT_SIGNS.add(clientSignal);
         }
         return 1;
     }
@@ -51,12 +52,13 @@ public class FabricClientGetMarkCommand {
             sourceStack.sendError(Component.translatable("sign.source_discord"));
             return false;
         }
-        if(mark.getTarget() instanceof EntityTarget entitySign && entitySign.isLocalPlayer()){
+
+        if(mark.target() instanceof EntityTarget entitySign && entitySign.isLocalPlayer()){
             sourceStack.sendError(Component.translatable("sign.self"));
             return false;
         }
         Vec3 position = Minecraft.getInstance().player.position();
-        if(mark.getPointPos().distanceTo(position) >= 100 && mark.getLifecycle() != -1) return false;
+        if(mark.getPointPos().distanceTo(position) >= Config.AutoReceiveDistance() && mark.getLifecycle() != -1) return false;
 
         return true;
     }

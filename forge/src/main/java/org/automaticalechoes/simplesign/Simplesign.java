@@ -14,7 +14,7 @@ public class Simplesign {
         // Use Forge to bootstrap the Common mod.
 
 
-        CommonClass.init();
+       Constants.init();
 
     }
 }

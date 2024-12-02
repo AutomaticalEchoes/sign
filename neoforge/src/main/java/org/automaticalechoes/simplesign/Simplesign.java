@@ -13,7 +13,7 @@ public class Simplesign {
         // project.
 
         // Use NeoForge to bootstrap the Common mod.
-        Constants.LOG.info("Hello NeoForge world!");
-        CommonClass.init();
+//        Constants.LOG.info("Hello NeoForge world!");
+        Constants.init();
     }
 }

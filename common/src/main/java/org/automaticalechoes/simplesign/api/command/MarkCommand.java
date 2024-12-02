@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -80,10 +81,9 @@ public class MarkCommand {
                builder.WithItemStack(itemStack);
            }else {
                builder.WithEntity(entity);
-               builder.WithHoverEntity(entity);
            }
            builder.WithPos(entity.blockPosition());
-           mark = new SignImp(new EntityTarget(entity.getUUID(), entity.blockPosition(),itemStack),type);
+           mark = new SignImp(new EntityTarget(entity.getUUID(), entity.blockPosition(), entity, itemStack),type);
        }
 
        if(mark == null){
@@ -91,8 +91,9 @@ public class MarkCommand {
            return 0;
        }
 
+       MutableComponent signMessage = builder.BuildSignMessage(mark, player, entity);
        SendMessage(player, sourceStack.getServer().getPlayerList(), PlayerChatMessage.unsigned(player.getUUID(),"")
-               .withUnsignedContent(builder.BuildSignMessage(mark, player, entity)), ChatType.bind(ChatType.CHAT,sourceStack));
+               .withUnsignedContent(signMessage), ChatType.bind(ChatType.CHAT,sourceStack));
        return 1;
    }
 

@@ -60,7 +60,6 @@ public interface MessageBuilder {
         if(pos != null){
             mutableComponent.append(AT).append(pos);
         }
-
         return mutableComponent;
     }
 

@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GuiMixin {
     @Inject(method = "renderItemHotbar", at = {@At("RETURN")})
     private void renderHotbar(GuiGraphics pGuiGraphics, DeltaTracker pDeltaTracker, CallbackInfo ci) {
-        Constants.Client.MARK_RENDER.render2D(pGuiGraphics);
+        Constants.Client.CLIENT_SIGNS.setup(pGuiGraphics);
     }
 }
