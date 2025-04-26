@@ -18,15 +18,11 @@ public class ToolTipRender {
         int renderY = (int) (0.5 * mc.getWindow().getGuiScaledHeight());
         if(focusSigns.size() > 1){
             int i = 0;
-            int rate;
-            int extra;
             int offset;
             int renderY0;
             for (ClientSign sign : focusSigns){
-                rate = i / 2;
-                extra = i % 2;
-                offset = (rate + Math.min(1 , rate)) * 10;
-                renderY0 = renderY + (extra != 0 ?  offset : - offset);
+                offset =  ((i & 1) == 0) ? (i / 2) * 20 : - (i + 1) / 2 * 20;
+                renderY0 = renderY + offset;
                 Component tooltipComponent = sign.getTooltipComponents().getFirst();
                 guiGraphics.renderTooltip(mc.font, tooltipComponent, renderX, renderY0);
                 i++;
