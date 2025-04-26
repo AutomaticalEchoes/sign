@@ -9,7 +9,7 @@ public interface Sign {
      String TYPE = "sign_type";
      SignalTarget target();
 //     Vec3 getPointPos();
-     CompoundTag CreateTag();
+     CompoundTag createTag();
      int typeN();
 
 

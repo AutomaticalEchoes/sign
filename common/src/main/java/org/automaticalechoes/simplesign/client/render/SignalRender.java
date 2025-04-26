@@ -13,8 +13,6 @@ import org.automaticalechoes.simplesign.Constants;
 import org.automaticalechoes.simplesign.client.ClientSign;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class SignalRender {
     public static ResourceLocation RESOURCE_DEFAULT = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID,"textures/point_render/default.png");
@@ -30,22 +28,15 @@ public class SignalRender {
 
         if(itemStack != null){
             guiGraphics.renderItem(itemStack, - 8,  - 8);
-            if(rP.x > 0.45 && rP.x < 0.55 && rP.y > 0.45 && rP.y < 0.55 ){
-                guiGraphics.renderTooltip(mc.font, itemStack, 0,0);
-            }
         }else{
             guiGraphics.pose().pushPose();
             guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(45.0F));
             guiGraphics.blit(RESOURCE_DEFAULT, - 12, - 12, 0, 0, 24, 24, 24, 24);
             guiGraphics.pose().popPose();
         }
-
-
-
         guiGraphics.drawString(mc.font, distance, - mc.font.width(distance) / 2, 10, sign.getColor().getRGB());
         guiGraphics.pose().popPose();
         sign.tick();
     }
-
 
 }

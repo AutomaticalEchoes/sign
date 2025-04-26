@@ -2,7 +2,10 @@ package org.automaticalechoes.simplesign.client;
 
 
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.automaticalechoes.simplesign.api.sign.Sign;
@@ -10,6 +13,7 @@ import org.automaticalechoes.simplesign.api.sign.target.SignalTarget;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.List;
 
 public class ClientSign implements Sign {
     private final SignalTarget target;
@@ -45,7 +49,11 @@ public class ClientSign implements Sign {
 
     @Nullable
     public ItemStack getItemStack() {
-        return this.target.getItemStack();
+        return target.itemStack();
+    }
+
+    public List<Component> getTooltipComponents() {
+        return target.toolTipComponents();
     }
 
     public int getLifecycle() {
@@ -66,6 +74,11 @@ public class ClientSign implements Sign {
         this.distance = distance;
     }
 
+    public void setupRenderPos(Vec3 vec3, double distance){
+        this.renderPosition = vec3;
+        this.distance = distance;
+    }
+
     public Vec3 getRenderPosition() {
         return renderPosition;
     }
@@ -80,7 +93,7 @@ public class ClientSign implements Sign {
     }
 
     @Override
-    public CompoundTag CreateTag() {
+    public CompoundTag createTag() {
         return null;
     }
 

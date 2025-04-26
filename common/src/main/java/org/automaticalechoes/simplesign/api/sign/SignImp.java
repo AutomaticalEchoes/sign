@@ -7,13 +7,14 @@ import org.automaticalechoes.simplesign.api.sign.target.SignalTarget;
 public record SignImp(SignalTarget target, int typeN) implements Sign {
 
     @Override
-    public CompoundTag CreateTag() {
+    public CompoundTag createTag() {
         CompoundTag compoundTag = target.CreateTag();
         compoundTag.putInt(TYPE, typeN);
+
         return compoundTag;
     }
 
     static Sign fromTag(CompoundTag tag){
-        return new SignImp(SignalTarget.FromTag(tag), tag.getInt(TYPE));
+        return new SignImp( SignalTarget.FromTag(tag), tag.getInt(TYPE));
     }
 }

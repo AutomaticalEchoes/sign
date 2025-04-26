@@ -2,14 +2,17 @@ package org.automaticalechoes.simplesign.api.sign.target;
 
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.List;
 import java.util.UUID;
 
 public class EntityTarget implements SignalTarget {
@@ -39,9 +42,19 @@ public class EntityTarget implements SignalTarget {
         return new Color(uuid.hashCode());
     }
 
+    @Override
+    public @Nullable ItemStack itemStack() {
+        return this.itemStack;
+    }
+
 
     public Vec3 getPointPos() {
         return entity != null ? entity.getEyePosition() : pos.getCenter();
+    }
+
+    @Override
+    public List<Component> toolTipComponents() {
+        return itemStack !=null && !itemStack.isEmpty()?  Screen.getTooltipFromItem(Minecraft.getInstance(), itemStack) : entity != null ? entity.getDisplayName().toFlatList() : List.of();
     }
 
     @Override
@@ -91,12 +104,5 @@ public class EntityTarget implements SignalTarget {
 
     public boolean isLocalPlayer(){
         return this.uuid.equals(Minecraft.getInstance().player.getUUID());
-    }
-
-
-    @Override
-    @Nullable
-    public ItemStack getItemStack(){
-       return this.itemStack;
     }
 }

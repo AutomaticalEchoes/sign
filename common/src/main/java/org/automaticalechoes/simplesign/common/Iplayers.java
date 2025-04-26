@@ -1,6 +1,6 @@
 package org.automaticalechoes.simplesign.common;
 
 public interface Iplayers {
-    boolean canUse();
-    void trigger();
+    boolean simpleSign$canUse();
+    void simpleSign$trigger();
 }

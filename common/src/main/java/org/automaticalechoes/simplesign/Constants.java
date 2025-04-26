@@ -3,8 +3,7 @@ package org.automaticalechoes.simplesign;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import org.automaticalechoes.simplesign.client.ClientSignalQue;
-import org.automaticalechoes.simplesign.client.render.SignalRender;
+import org.automaticalechoes.simplesign.client.ClientSignalManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,7 @@ public class Constants {
     }
 
     public static class Client{
-        public static final ClientSignalQue CLIENT_SIGNS = new ClientSignalQue(15);
+        public static final ClientSignalManager CLIENT_SIGNS = new ClientSignalManager(15);
 
     }
 }

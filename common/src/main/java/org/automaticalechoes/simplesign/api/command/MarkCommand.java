@@ -25,6 +25,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.scores.Team;
 import org.automaticalechoes.simplesign.Constants;
@@ -63,18 +64,20 @@ public class MarkCommand {
        SignMessageBuilder builder = new SignMessageBuilder();
        ServerPlayer player = sourceStack.getPlayer();
 
-       if(player == null || !((Iplayers)player).canUse()){
+       if(player == null || !((Iplayers)player).simpleSign$canUse()){
            sourceStack.sendFailure(Component.translatable("sign.no_useful_time"));
            return 0;
        }
+       Level serverlevel = player.level();
 
        Sign mark = null;
        ItemStack itemStack = null;
        if(pos != null){
            Block block = sourceStack.getLevel().getBlockState(pos).getBlock();
            ResourceLocation key = BuiltInRegistries.BLOCK.getKey(block);
-           mark = new SignImp(new BlockTarget(pos, key), type);
+           boolean hasBlockEntity = serverlevel.getBlockEntity(pos) != null;
            builder.WithBlock(block).WithPos(pos);
+           mark = new SignImp(BlockTarget.Create(pos, key,hasBlockEntity), type);
        }else if(entity != null){
            if(entity instanceof ItemEntity || (entity instanceof ItemFrame itemFrame && !itemFrame.getItem().isEmpty())){
                itemStack = entity instanceof ItemEntity itemEntity ? itemEntity.getItem() : ((ItemFrame)entity).getItem();
@@ -90,7 +93,6 @@ public class MarkCommand {
            sourceStack.sendFailure(Component.translatable("sign.unvalid_mark"));
            return 0;
        }
-
        MutableComponent signMessage = builder.BuildSignMessage(mark, player, entity);
        SendMessage(player, sourceStack.getServer().getPlayerList(), PlayerChatMessage.unsigned(player.getUUID(),"")
                .withUnsignedContent(signMessage), ChatType.bind(ChatType.CHAT,sourceStack));
@@ -104,7 +106,7 @@ public class MarkCommand {
             Team team1 = serverPlayer1.getTeam();
             return team1 == serverPlayer.getTeam();
         }, serverPlayer, bound);
-        ((Iplayers)serverPlayer).trigger();
+        ((Iplayers)serverPlayer).simpleSign$trigger();
     }
 
 

@@ -30,12 +30,8 @@ public class Actions {
 
     }
 
-
-
     public static void RemoveMark(){
-        if(!Constants.Client.CLIENT_SIGNS.isEmpty()){
-            Constants.Client.CLIENT_SIGNS.removeLast();
-        }
+        Constants.Client.CLIENT_SIGNS.removeLast();
     }
 
     public static void ClearMark(){

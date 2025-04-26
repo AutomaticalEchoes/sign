@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.automaticalechoes.simplesign.client.render.SignalRender;
+import org.automaticalechoes.simplesign.client.render.ToolTipRender;
 import org.automaticalechoes.simplesign.mixin.IFrustum;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -14,36 +15,35 @@ import org.joml.Vector4f;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class ClientSignalQue extends LinkedList<ClientSign> {
-    private final int limitSize;
-    public ClientSignalQue(int size){
-        this.limitSize = size;
+public class ClientSignalManager {
+    private final ILink signs;
+    private final ILink focusSigns;
+
+    public ClientSignalManager(int size) {
+        this.signs = new ILink(size);
+        this.focusSigns = new ILink(size);
     }
 
-    @Override
-    public boolean add(ClientSign clientSign) {
-        int i = this.indexOf(clientSign);
-
-        if(i >= 0){
-            ClientSign clientSign1 = this.get(i);
-            if (clientSign1.getLifecycle() == -1) return true;
-            clientSign1.setLifecycle(clientSign.getLifecycle());
-            return true;
-        }
-
-        if(this.size() >= limitSize) this.poll();
-        return super.add(clientSign);
+    public void add(ClientSign clientSign){
+        signs.add(clientSign);
     }
+
+    public void removeLast(){
+        if(!signs.isEmpty()) signs.removeLast();
+    }
+
+    public void clear(){ signs.clear(); }
 
     public void setup(GuiGraphics guiGraphics){
-        if(this.isEmpty()) return;
+        if(signs.isEmpty()) return;
         Minecraft mc = Minecraft.getInstance();
         Camera mainCamera = mc.gameRenderer.getMainCamera();
         Frustum frustum = ((ILevelRender)mc.levelRenderer).getFrustum();
         IFrustum ifrustum = (IFrustum) frustum;
         Matrix4f matrix4f = ifrustum.getMatrix();
         Vec3 viewVec = new Vec3(mainCamera.getLookVector());
-        Iterator<ClientSign> iterator = iterator();
+        focusSigns.clear();
+        Iterator<ClientSign> iterator = signs.iterator();
         while (iterator.hasNext()) {
             ClientSign sign = iterator.next();
             if (!sign.CanUse()) {
@@ -65,10 +65,36 @@ public class ClientSignalQue extends LinkedList<ClientSign> {
             float x = Mth.clamp(xScale, 0, 1.0F);
             if(dotView < 0) x = x > 0.5? 1.0f : 0;
             float y = Mth.clamp(yScale, 0, 1.0F);
-            sign.setupRenderPos(x, y, w, renderPos.length());
-            sign.tick();
+            Vec3 rP = new Vec3(x, y, w);
+            sign.setupRenderPos(rP, renderPos.length());
+            if(Mth.abs((float) (rP.x - 0.5)) < 0.02 && Mth.abs((float) (rP.y - 0.5)) < 0.02){
+                focusSigns.add(sign);
+            }
             SignalRender.render2D(guiGraphics, sign);
         }
+        ToolTipRender.RenderToolTip(mc,guiGraphics,focusSigns);
     }
+
+     public static class ILink extends LinkedList<ClientSign>{
+         private final int limitSize;
+         public ILink(int size){
+             this.limitSize = size;
+         }
+
+         @Override
+         public boolean add(ClientSign clientSign) {
+             int i = this.indexOf(clientSign);
+
+             if(i >= 0){
+                 ClientSign clientSign1 = this.get(i);
+                 if (clientSign1.getLifecycle() == -1) return true;
+                 clientSign1.setLifecycle(clientSign.getLifecycle());
+                 return true;
+             }
+
+             if(this.size() >= limitSize) this.poll();
+             return super.add(clientSign);
+         }
+     }
 
 }

@@ -1,32 +1,43 @@
 package org.automaticalechoes.simplesign.api.sign.target;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.List;
 
-public class BlockTarget implements SignalTarget {
+public record BlockTarget(BlockPos blockPos, ResourceLocation blockType, boolean hasBlockEntity, @Nullable ItemStack itemStack, List<Component> toolTipComponents) implements SignalTarget {
     public static final String BLOCK_POS = "block_pos";
     public static final String BLOCK_TYPE = "block_type";
+    public static final String HAS_BLOCK_ENTITY = "has_block_entity";
 
-    private final BlockPos blockPos;
-    private final ResourceLocation blockType;
-
-    public BlockTarget(BlockPos blockPos, ResourceLocation resourceLocation){
-        this.blockPos = blockPos;
-        this.blockType = resourceLocation;
+    public static BlockTarget Create(BlockPos blockPos, ResourceLocation blockType, boolean hasBlockEntity, ItemStack itemStack) {
+        return new BlockTarget(blockPos, blockType, hasBlockEntity, itemStack, Screen.getTooltipFromItem(Minecraft.getInstance(), itemStack));
     }
 
-    public BlockTarget(CompoundTag compoundTag){
+    public static BlockTarget Create(BlockPos blockPos, ResourceLocation blockType, boolean hasBlockEntity) {
+        return BlockTarget.Create(blockPos, blockType, hasBlockEntity, SetupItem(blockType));
+    }
+
+    public static BlockTarget Create(BlockPos blockPos, ResourceLocation blockType) {
+        return BlockTarget.Create(blockPos, blockType, false);
+    }
+
+    public static BlockTarget FromTag(CompoundTag compoundTag){
         long aLong = compoundTag.getLong(BLOCK_POS);
-        this.blockPos = BlockPos.of(aLong);
-        this.blockType = ResourceLocation.tryParse(compoundTag.getString(BLOCK_TYPE));
+        BlockPos blockPos = BlockPos.of(aLong);
+        ResourceLocation blockType = ResourceLocation.tryParse(compoundTag.getString(BLOCK_TYPE));
+        boolean hasBlockEntity = compoundTag.getBoolean(HAS_BLOCK_ENTITY);
+        return BlockTarget.Create(blockPos, blockType, hasBlockEntity);
     }
 
     public CompoundTag CreateTag(){
@@ -34,6 +45,7 @@ public class BlockTarget implements SignalTarget {
         compoundTag.putString(TARGET_TYPE, BLOCK);
         compoundTag.putLong(BLOCK_POS,blockPos.asLong());
         compoundTag.putString(BLOCK_TYPE,blockType.toString());
+        compoundTag.putBoolean(HAS_BLOCK_ENTITY,hasBlockEntity);
         return compoundTag;
     }
 
@@ -48,14 +60,9 @@ public class BlockTarget implements SignalTarget {
         return new Color(blockPos.hashCode());
     }
 
-    public BlockPos getBlockPos() {
-        return blockPos;
-    }
-
     public Vec3 getPointPos(){
         return blockPos.getCenter();
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -64,9 +71,10 @@ public class BlockTarget implements SignalTarget {
         return obj1.blockPos.equals(this.blockPos) && obj1.blockType.equals(this.blockType);
     }
 
-    @Override
-    public ItemStack getItemStack(){
-        Block block = BuiltInRegistries.BLOCK.get(this.blockType);
+    static ItemStack SetupItem(ResourceLocation blockType) {
+        Block block = BuiltInRegistries.BLOCK.get(blockType);
         return block.asItem().getDefaultInstance();
     }
+
+
 }

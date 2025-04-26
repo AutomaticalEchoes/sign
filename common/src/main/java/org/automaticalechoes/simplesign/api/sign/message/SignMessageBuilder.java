@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SignMessageBuilder implements MessageBuilder{
 
-    private MutableComponent markName;
-    private MutableComponent pos;
-    private HoverEvent hoverEvent;
+    public MutableComponent markName;
+    public MutableComponent pos;
+    public HoverEvent hoverEvent;
 
     public SignMessageBuilder WithMarkName(MutableComponent markName, Style style) {
         this.markName = markName.withStyle(style);
@@ -61,7 +61,7 @@ public class SignMessageBuilder implements MessageBuilder{
     }
 
     public MutableComponent BuildSignMessage(Sign sign, ServerPlayer player, @Nullable Entity entity) {
-        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ssi_client getmark " + sign.CreateTag());
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ssi_client getmark " + sign.createTag());
         return MessageBuilder.getBuilder(sign, player, entity).apply(markName, pos).withStyle(style -> style
                 .withColor(ChatFormatting.GRAY)
                 .withHoverEvent(hoverEvent)
